@@ -101,13 +101,13 @@ namespace Youtube.Controllers
                     break;
 
                 if (!string.IsNullOrWhiteSpace(standardNameParam))
-                    p.Add("\"" + standardNameParam+ "\"");
+                    p.Add(standardNameParam);
 
                 if (!string.IsNullOrWhiteSpace(ccstandardCodeParam))
-                    p.Add("\"" + standardNameParam + "\"");
+                    p.Add(standardNameParam);
             }
 
-            return string.Join("|", p);
+            return string.Join("+", p);
         }
     }
 
