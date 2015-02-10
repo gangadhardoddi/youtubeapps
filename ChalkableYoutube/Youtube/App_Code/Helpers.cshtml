@@ -1,0 +1,17 @@
+﻿@using System.CodeDom.Compiler
+@using Youtube.Models
+
+@helper YoutubeIframe(VideoModel video, int width = 645, int height = 395)
+{
+    string path = "https://www.youtube.com/embed/" + Model.Id;
+    <div class="preview">
+    <iframe width="@width" height="@height" src="@path" frameborder="0" allowfullscreen></iframe>
+        <br />
+        <div class="uploaded">uploaded by: @Model.UploadedBy <br /></div>
+        <div class="view">@Model.Views</div>
+        <div class="clear-fix"></div>
+        @Model.Description 
+        <br />
+        <br />
+    </div>    
+}

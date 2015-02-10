@@ -1,0 +1,13 @@
+syntax: glob
+ChalkableBaseAppLib/ChalkableBaseAppLib/bin/*
+ChalkableBaseAppLib/ChalkableBaseAppLib/obj/*
+ChalkableBaseAppLib/ChalkableBaseAppLib/ChalkableBaseAppLib.csproj.user
+ChalkableYoutube/Youtube/Youtube.csproj.user
+ChalkableYoutube/Youtube/bin/*
+ChalkableYoutube/Chalkable.Youtube.v11.suo
+ChalkableYoutube/Chalkable.Youtube.suo
+ChalkableYoutube/Youtube/obj/*
+ChalkableYoutube/Youtube/trace.log
+ChalkableYoutube/Azure/Azure.ccproj.user
+ChalkableBaseAppLib/ChalkableBaseAppLib/ChalkableBaseAppLib.v11.suo
+ChalkableYoutube/Azure/obj/Debug/Azure.ccprojResolveAssemblyReference.cache
