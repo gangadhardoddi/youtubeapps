@@ -1,17 +1,41 @@
 ﻿@using System.CodeDom.Compiler
+@using System.Web.Mvc
+@using System.Web.Mvc.Html
+@using System.Web.Routing
 @using Youtube.Models
+@using HtmlHelper = System.Web.Mvc.HtmlHelper
 
 @helper YoutubeIframe(VideoModel video, int width = 645, int height = 395)
 {
-    string path = "https://www.youtube.com/embed/" + Model.Id;
+    string path = "https://www.youtube.com/embed/" + video.Id;
     <div class="preview">
     <iframe width="@width" height="@height" src="@path" frameborder="0" allowfullscreen></iframe>
         <br />
-        <div class="uploaded">uploaded by: @Model.UploadedBy <br /></div>
-        <div class="view">@Model.Views</div>
+        <div class="uploaded-by">uploaded by: @video.UploadedBy <br /></div>
+        <div class="views-count">@video.Views</div>
         <div class="clear-fix"></div>
-        @Model.Description 
+        @video.Description 
         <br />
         <br />
     </div>    
+}
+
+@helper AppLogo(HtmlHelper Html, int announcementAppId, Guid districtId)
+{
+    <div class="app-logo">@Html.ActionLink("cancel", "Edit", 
+        new RouteValueDictionary
+        {
+            {"announcementApplicationId", announcementAppId},
+            {"districtId", districtId}
+        });
+    </div>
+}
+
+
+@helper SearchQuery()
+{
+    <div class="query-container">
+        <input id="query"  placeholder="Video topic or URL" name="query" type="text" value="">
+        <input type="submit" id="search-button" value=""/>
+    </div>        
 }

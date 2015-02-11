@@ -4,11 +4,5 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div id="logo">@Html.ActionLink("cancel", "Edit", new RouteValueDictionary
-                   {
-                       {"announcementApplicationId", Model.AnnouncementApplicationId},
-                       {"districtId", Model.DistrictId}
-                   });
-</div>
-
+@Helpers.AppLogo(Html, Model.AnnouncementApplicationId, Model.DistrictId)
 @Helpers.YoutubeIframe(Model)

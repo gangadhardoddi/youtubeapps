@@ -11,3 +11,7 @@ ChalkableYoutube/Youtube/trace.log
 ChalkableYoutube/Azure/Azure.ccproj.user
 ChalkableBaseAppLib/ChalkableBaseAppLib/ChalkableBaseAppLib.v11.suo
 ChalkableYoutube/Azure/obj/Debug/Azure.ccprojResolveAssemblyReference.cache
+ChalkableYoutube/Youtube/.idea/*
+ChalkableYoutube/Youtube/.sass-cache/*
+ChalkableYoutube/Azure/csx/Debug/*
+ChalkableYoutube/Azure/obj/Debug/*

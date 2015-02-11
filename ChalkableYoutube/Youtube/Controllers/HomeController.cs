@@ -41,7 +41,7 @@ namespace Youtube.Controllers
             {
                 var chalkableConnector = new ChalkableConnector(OauthClient);
                 var announcementApplication = chalkableConnector.GetAnnouncementApplicationById(announcementApplicationId);
-                var announcement = chalkableConnector.GetAnnouncemnetById(announcementApplication.data.announcementid);
+                var announcement = chalkableConnector.GetAnnouncementById(announcementApplication.data.announcementid);
                 query = announcement.data.classname;
             }
             var searchModel = new SearchModel

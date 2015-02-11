@@ -11,7 +11,7 @@ namespace Youtube.Logic
         {
         }
        
-        public AnnouncementDto GetAnnouncemnetById(int announcementId)
+        public AnnouncementDto GetAnnouncementById(int announcementId)
         {
             var url = Settings.Configuration.ChalkableRoot + "announcement/read.json";
             url = string.Format("{0}?{1}={2}", url, "announcementId", announcementId);

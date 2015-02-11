@@ -4,25 +4,15 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div id="logo">@Html.ActionLink("cancel", "Edit", 
-            new RouteValueDictionary
-            {
-                {"announcementApplicationId", Model.AnnouncementApplicationId},
-                {"districtId", Model.DistrictId}
-            });
-</div>
-
+@Helpers.AppLogo(Html, Model.AnnouncementApplicationId, Model.DistrictId)
 @using (Html.BeginForm())
 {    
     <div>
         @Html.Hidden("count", Model.Videos.Count(), new {id = "videos-count"})
         @Html.Hidden("standardQuery", Model.StandardQuery)
-        <div id="query-container">
-            <input id="query"  placeholder="Video topic or URL" name="query" type="text" value="">
-            <input type="submit" id="search-button" value=""/>
-        </div>
-        <div class="white-container">
-            <div class="table">
+        @Helpers.SearchQuery()
+        <div class="video-list-container">
+            <div class="video-list">
                 @for (var i = 0; i < Model.Videos.Count(); i++)
                 {
                                              
@@ -30,19 +20,19 @@
                                             
                     if(i % 2 == 0)
                     {
-                        @:<div class="line">
+                        @:<div class="row">
                     }
-                    <div class="tr">
-                        <div class="td">
+                    <div class="video-list-item">
+                        <div class="video-thumbnail-container">
                             @{
                                 string imgSrc = "https://i4.ytimg.com/vi/" + @v.Id + "/mqdefault.jpg";
                             }
-                            <div class="video-container">
+                            <div class="video-thumbnail">
                                 <img width="200" height="110" src="@imgSrc" />
                                 <div class="duration">@v.Duration</div>
                             </div>
                         </div>
-                        <div class="td">
+                        <div class="video-thumbnail-container description-container">
                             <h2>
                                 @Html.ActionLink(@v.ShortTitle, "Preview", new RouteValueDictionary
                                 {
