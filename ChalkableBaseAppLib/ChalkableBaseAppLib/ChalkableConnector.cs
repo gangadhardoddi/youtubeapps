@@ -15,13 +15,13 @@ namespace ChalkableBaseAppLib
             try
             {
                 Debug.WriteLine("Request on: " + url);
-                if (oauthClient != null)
+                if (_oauthClient != null)
                 {
                     Debug.WriteLine("Request on: " + url);
                     var webRequest = (HttpWebRequest) WebRequest.Create(url);
                     webRequest.Method = WebRequestMethods.Http.Get;
                     webRequest.Accept = "application/json";
-                    oauthClient.AppendAccessTokenTo(webRequest);
+                    _oauthClient.AppendAccessTokenTo(webRequest);
                     var response = webRequest.GetResponse();
                     using (var stream = response.GetResponseStream())
                     {
@@ -41,21 +41,25 @@ namespace ChalkableBaseAppLib
             throw new Exception("oauth client isn't initialized");
         }
 
-        private SimpleOAuth2Client oauthClient;
+        private readonly SimpleOAuth2Client _oauthClient;
+        private readonly string _apiRoot;
 
-        public BaseChalkableConnector(SimpleOAuth2Client oauthClient)
+        public BaseChalkableConnector(SimpleOAuth2Client oauthClient, string apiRoot)
         {
-            this.oauthClient = oauthClient;
+            _oauthClient = oauthClient;
+            _apiRoot = apiRoot;
         }
+
+        protected string ApiRoot { get { return _apiRoot; }}
 
         public SchoolPersonDto GetMe()
         {
-            return Call<SchoolPersonDto>(ChalkableConfig.Configuration.ChalkableRoot + "Person/Me.json");
+            return Call<SchoolPersonDto>(ApiRoot + "/Person/Me.json");
         }
 
         public AnnouncementApplicationDto GetAnnouncementApplicationById(int announcementApplicationId)
         {
-            var url = ChalkableConfig.Configuration.ChalkableRoot + "Application/GetAnnouncementApplication.json";
+            var url = ApiRoot + "/Application/GetAnnouncementApplication.json";
             url = string.Format("{0}?{1}={2}", url, "announcementApplicationId", announcementApplicationId);
             return Call<AnnouncementApplicationDto>(url);
         }

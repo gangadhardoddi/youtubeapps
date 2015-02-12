@@ -281,9 +281,6 @@
     <Content Include="Views\Home\Video.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Home\Embedded.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="App_Code\Helpers.cshtml" />
     <None Include="Logic\Data\DataModel.dbml">
       <Generator>MSLinqToSQLGenerator</Generator>

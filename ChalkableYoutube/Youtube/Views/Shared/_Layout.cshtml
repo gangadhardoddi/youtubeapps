@@ -14,7 +14,7 @@
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
     @Scripts.Render("~/Scripts/jquery-1.7.1.min.js ")
-    @Scripts.Render(Settings.Configuration.ChalkableRoot + "scripts/api/chlk-post-message-api.js")
+    @Scripts.Render(ViewBag.ApiRoot + "/scripts/api/chlk-post-message-api.js")
         
 
     @RenderSection("headerscripts", required: false)

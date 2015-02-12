@@ -15,42 +15,18 @@
             <div class="video-list">
                 @for (var i = 0; i < Model.Videos.Count(); i++)
                 {
-                                             
-                    var v = Model.Videos.ElementAt(i);
-                                            
+                    @Helpers.VideoThumbnail(Html, Model.Videos.ElementAt(i), Model.AnnouncementApplicationId, Model.DistrictId)                        
                     if(i % 2 == 0)
                     {
                         @:<div class="row">
                     }
-                    <div class="video-list-item">
-                        <div class="video-thumbnail-container">
-                            @{
-                                string imgSrc = "https://i4.ytimg.com/vi/" + @v.Id + "/mqdefault.jpg";
-                            }
-                            <div class="video-thumbnail">
-                                <img width="200" height="110" src="@imgSrc" />
-                                <div class="duration">@v.Duration</div>
-                            </div>
-                        </div>
-                        <div class="video-thumbnail-container description-container">
-                            <h2>
-                                @Html.ActionLink(@v.ShortTitle, "Preview", new RouteValueDictionary
-                                {
-                                    { "id", v.Id }, 
-                                    { "announcementApplicationId", Model.AnnouncementApplicationId },
-                                    {"districtId", Model.DistrictId}
-                                })                    
-                            </h2>
-                            <div class="description">@v.ShortDescription</div>
-                            <div class="uploaded-edit">by @v.UploadedBy | @v.Views views</div>
-                        </div>
-                    </div>
+                    
                     if (i % 2 == 1 || i == Model.Videos.Count() - 1)
                     {
                         @:</div>
                     }
                 }
-                <a id="see-more"></a>
+                <a class="see-more"></a>
             </div>
         </div>
     </div>

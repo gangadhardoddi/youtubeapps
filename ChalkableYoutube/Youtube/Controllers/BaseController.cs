@@ -16,11 +16,18 @@ namespace Youtube.Controllers
     {
 
         private const string OAUTH_CLIENT = "OAUTH_CLIENT";
-        protected SimpleOAuth2Client OauthClient;
+        private const string API_ROOT = "API_ROOT";
+        protected SimpleOAuth2Client OauthClient { get { return Session[OAUTH_CLIENT] as SimpleOAuth2Client; } }
         protected string Mode { private set; get; }
         protected int AnnouncementApplicationId { private set; get; }
         protected int StudentId { private set; get; }
         protected string StandardSearchQuery { private set; get; }
+
+        protected string ApiRoot { get { return Session[API_ROOT] as string; } }
+        protected ApplicationEnvironment Configuration
+        {
+            get { return Settings.GetConfiguration(ApiRoot); }
+        }
 
         protected override void Initialize(RequestContext requestContext)
         {
@@ -36,7 +43,7 @@ namespace Youtube.Controllers
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             AuthenticateByChalkable();
-            ViewData["chalkableurl"] = Settings.Configuration.ChalkableRoot;
+            ViewBag.ApiRoot = ApiRoot;
             base.OnActionExecuting(filterContext);
         }
 
@@ -45,31 +52,33 @@ namespace Youtube.Controllers
             var urlParams = Request.Params;
             RetrieveParams(urlParams);
 
-            var authUri = new Uri(Settings.Configuration.AuthUri);
-            var acsUri = new Uri(Settings.Configuration.AcsUri);
-            var redirectUri = new Uri(Settings.Configuration.RedirectUri);
-            var appSecret = Settings.Configuration.AppSecret;
-            var appName = Settings.Configuration.ApplicationName;
-            var chlkRoot = Settings.Configuration.ChalkableRoot;
+            var code = urlParams[Settings.CODE_PARAM];
+            var error = urlParams[Settings.ERROR_PARAM];
+            var apiRoot = urlParams[Settings.API_ROOT_PARAM];
 
-            var code = urlParams["code"];
-            var error = urlParams["error"];
-
-            if (Session[OAUTH_CLIENT] == null || code != null || error != null)
+            if (!string.IsNullOrEmpty(error))
             {
-                OauthClient = new SimpleOAuth2Client(authUri, acsUri, appName, appSecret, chlkRoot, redirectUri);
-                if (!string.IsNullOrEmpty(error))
-                {
-                    throw new Exception(string.Format("OAuth error {0}. {1}", error, Request.Params["error_description"]));
-                }
-                if (!string.IsNullOrEmpty(code))
-                {
-                    OauthClient.Authorize(code);
-                    Session[OAUTH_CLIENT] = OauthClient;
-                }
+                throw new Exception(string.Format("OAuth error {0}. {1}", error,
+                    Request.Params["error_description"]));
             }
-            else
-                OauthClient = Session[OAUTH_CLIENT] as SimpleOAuth2Client;
+
+            if (apiRoot == null) return;
+
+            Session[API_ROOT] = apiRoot;
+
+            var acsUri = new Uri(Configuration.AcsUri);
+            var redirectUri = new Uri(Configuration.RedirectUri);
+            var appSecret = Configuration.AppSecret;
+            var appName = Configuration.ClientId;
+            var chlkRoot = Configuration.Scope;
+
+            if (string.IsNullOrEmpty(code)) return;
+
+            var oauthClient = new SimpleOAuth2Client(new Uri(apiRoot + "/authorize/index"), acsUri, appName, appSecret,
+                chlkRoot, redirectUri);
+                
+            oauthClient.Authorize(code);
+            Session[OAUTH_CLIENT] = oauthClient;
         }
 
         private void RetrieveParams(NameValueCollection urlParams)
@@ -80,8 +89,8 @@ namespace Youtube.Controllers
             else
                 AnnouncementApplicationId = -1;
 
-            if (!string.IsNullOrEmpty(urlParams[ChalkableConfig.STUDENT_ID_PARAM]))
-                StudentId = int.Parse(urlParams[ChalkableConfig.STUDENT_ID_PARAM]);
+            if (!string.IsNullOrEmpty(urlParams[Settings.STUDENT_ID_PARAM]))
+                StudentId = int.Parse(urlParams[Settings.STUDENT_ID_PARAM]);
             else
                 StudentId = -1;
             StandardSearchQuery = BuildStandardSearchQuery(urlParams);

@@ -1,10 +1,11 @@
 ﻿using System.Configuration;
+using System.Linq;
 
 namespace ChalkableBaseAppLib
 {
     public class Settings
     {
-        public const string APPLICATION_CONFIG = "applicationconfig";
+        public const string APPLICATION_CONFIG = "applicationconfigs";
 
         public const string SCHOOL_PERSON_ID_PARM = "schoolpersonid";
         public const string USER_TOKEN = "usertoken";
@@ -17,9 +18,12 @@ namespace ChalkableBaseAppLib
         public const string TEACHER_ROLE_NAME = "teacher";
         public const string STUDENT_ROLE_NAME = "student";
 
+
+        public const string API_ROOT_PARAM = "apiRoot";
+        public const string CODE_PARAM = "code";
+        public const string ERROR_PARAM = "error";
         public const string PAGE_MODE_PARAM = "mode";
         public const string EDIT_MODE = "edit";
-        public const string EMBEDDED_MODE = "embedded";
         public const string VIEW_MODE = "view";
         public const string MY_VIEW_MODE = "myview";
         public const string SUMMARY_VIEW_MODE = "summaryview";
@@ -31,16 +35,19 @@ namespace ChalkableBaseAppLib
         public const string STANDARD_ID_PARAM = "standardId";
         public const string CC_STANDARD_CODE_PARAM = "ccStandardCode";
 
-        static Settings()
-        {
-            configuration = ConfigurationManager.GetSection(APPLICATION_CONFIG) as ApplicationConfiguration;
-        }
+        public const string STUDENT_ID_PARAM = "studentId";
 
-        private static ApplicationConfiguration configuration;
-        public static ApplicationConfiguration Configuration
+        public static ApplicationEnvironment GetConfiguration(string environment)
         {
-            get { return configuration; }
+            var items = (ConfigurationManager.GetSection(APPLICATION_CONFIG) as ApplicationConfigurations).Environments;
+
+            for (var i = 0; i < items.Count; ++i)
+            {
+                if (items[i].Environment == environment)
+                    return items[i];
+            }
+
+            return null;
         }
-    
     }
 }

@@ -15,7 +15,7 @@ namespace Youtube.Controllers
         {
             if (!string.IsNullOrEmpty(Mode))
             {
-                var chalkableConnector = new ChalkableConnector(OauthClient);
+                var chalkableConnector = new ChalkableConnector(OauthClient, ApiRoot);
                 var me = chalkableConnector.GetMe();
 
                 var actionParams = new RouteValueDictionary
@@ -26,8 +26,6 @@ namespace Youtube.Controllers
                 };
                 if (Mode == Settings.EDIT_MODE)     
                     return RedirectToAction("Edit", actionParams);
-                if (Mode == Settings.EMBEDDED_MODE) 
-                    return RedirectToAction("Embedded", actionParams);
                 if (Mode == Settings.VIEW_MODE || Mode == Settings.SUMMARY_VIEW_MODE || Mode == Settings.GRADING_VIEW_MODE)
                     return RedirectToAction("Video", actionParams);
             }
@@ -39,7 +37,7 @@ namespace Youtube.Controllers
         {
             if (string.IsNullOrEmpty(query) )
             {
-                var chalkableConnector = new ChalkableConnector(OauthClient);
+                var chalkableConnector = new ChalkableConnector(OauthClient, ApiRoot);
                 var announcementApplication = chalkableConnector.GetAnnouncementApplicationById(announcementApplicationId);
                 var announcement = chalkableConnector.GetAnnouncementById(announcementApplication.data.announcementid);
                 query = announcement.data.classname;
@@ -78,14 +76,6 @@ namespace Youtube.Controllers
             var model = VideoModel.Create(video, announcementApplicationId);
             model.AnnouncementApplicationId = announcementApplicationId;
             return View("Video", model);
-        }
-
-        public ActionResult Embedded(int announcementApplicationId, Guid districtId)
-        {
-            var storage = new Storage();
-            var videoId = storage.Get(districtId, announcementApplicationId);
-            var video = (new YoutubeConnector()).GetById(videoId);
-            return View("Embedded", VideoModel.Create(video, announcementApplicationId));
         }
     }
 }

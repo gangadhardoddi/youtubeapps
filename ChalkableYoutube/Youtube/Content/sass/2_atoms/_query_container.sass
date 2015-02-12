@@ -1,22 +1,27 @@
 .query-container
-  background: url("./Images/search.png") no-repeat
-  width: 358px
-  height: 43px
-  margin: 0 auto 51px
-  position: relative
-
+  background: #2e2d2e url("./Images/search.png") center top no-repeat
+  padding: 0 0 51px
+  position: fixed
+  top: 35px + 84px + 40px
+  left: 0
+  right: 0
+  z-index: 1
+  text-align: center
+  > *
+    vertical-align: middle
 
 #query
   border: none
   background: transparent
   width: 300px
-  margin: 8px 0 0 2px
+  margin: 0
   font: bold 14px Arial
   color: #333
-  padding: 5px
+  display: inline-block
+  line-height: 42px
 
 #search-button
-  position: absolute
+  display: inline-block
   width: 46px
   top: 0
   right: 0

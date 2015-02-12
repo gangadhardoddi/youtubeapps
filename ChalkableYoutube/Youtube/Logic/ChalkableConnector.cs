@@ -7,13 +7,14 @@ namespace Youtube.Logic
 {
     public class ChalkableConnector: BaseChalkableConnector
     {
-        public ChalkableConnector(SimpleOAuth2Client oauthClient):base(oauthClient)
+        public ChalkableConnector(SimpleOAuth2Client oauthClient, string apiRoot)
+            : base(oauthClient, apiRoot)
         {
         }
        
         public AnnouncementDto GetAnnouncementById(int announcementId)
         {
-            var url = Settings.Configuration.ChalkableRoot + "announcement/read.json";
+            var url = ApiRoot + "/announcement/read.json";
             url = string.Format("{0}?{1}={2}", url, "announcementId", announcementId);
             return Call<AnnouncementDto>(url);
         }

@@ -88,9 +88,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ApplicationConfiguration.cs" />
-    <Compile Include="ChalkableConfig.cs" />
+    <Compile Include="ApplicationEnvironment.cs" />
+    <Compile Include="ApplicationEnvironments.cs" />
     <Compile Include="ChalkableConnector.cs" />
+    <Compile Include="ApplicationConfigurations.cs" />
     <Compile Include="Models\Common\IntList.cs" />
     <Compile Include="Models\Dto\AnnouncementApplicationDto.cs" />
     <Compile Include="Models\Dto\AnnouncementDto.cs" />
