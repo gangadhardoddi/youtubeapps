@@ -50,7 +50,17 @@ namespace Youtube.Controllers
         private void AuthenticateByChalkable()
         {
             var urlParams = Request.Params;
-            RetrieveParams(urlParams);
+            Mode = urlParams[Settings.PAGE_MODE_PARAM] ?? Settings.MY_VIEW_MODE;
+            if (!string.IsNullOrEmpty(urlParams[Settings.ANNOUNCEMENT_APPLICATION_ID]))
+                AnnouncementApplicationId = int.Parse(urlParams[Settings.ANNOUNCEMENT_APPLICATION_ID]);
+            else
+                AnnouncementApplicationId = -1;
+
+            if (!string.IsNullOrEmpty(urlParams[Settings.STUDENT_ID_PARAM]))
+                StudentId = int.Parse(urlParams[Settings.STUDENT_ID_PARAM]);
+            else
+                StudentId = -1;
+            StandardSearchQuery = BuildStandardSearchQuery(urlParams);
 
             var code = urlParams[Settings.CODE_PARAM];
             var error = urlParams[Settings.ERROR_PARAM];
@@ -79,21 +89,6 @@ namespace Youtube.Controllers
                 
             oauthClient.Authorize(code);
             Session[OAUTH_CLIENT] = oauthClient;
-        }
-
-        private void RetrieveParams(NameValueCollection urlParams)
-        {
-            Mode = urlParams[Settings.PAGE_MODE_PARAM] ?? Settings.MY_VIEW_MODE;
-            if (!string.IsNullOrEmpty(urlParams[Settings.ANNOUNCEMENT_APPLICATION_ID]))
-                AnnouncementApplicationId = int.Parse(urlParams[Settings.ANNOUNCEMENT_APPLICATION_ID]);
-            else
-                AnnouncementApplicationId = -1;
-
-            if (!string.IsNullOrEmpty(urlParams[Settings.STUDENT_ID_PARAM]))
-                StudentId = int.Parse(urlParams[Settings.STUDENT_ID_PARAM]);
-            else
-                StudentId = -1;
-            StandardSearchQuery = BuildStandardSearchQuery(urlParams);
         }
 
         private static string BuildStandardSearchQuery(NameValueCollection urlParams)

@@ -6,9 +6,17 @@ namespace Youtube.Logic
 {
     public class Storage
     {
+
+        private readonly string connectionString;
+
+        public Storage(string connectionString)
+        {
+            this.connectionString = connectionString;
+        }
+
         public string Get(Guid districtId, int announcementAppId)
         {
-            using (var context = new DataModelDataContext())
+            using (var context = new DataModelDataContext(connectionString))
             {
                 var res = context.AnnouncementAssignments.FirstOrDefault(
                     x => x.DistrictId == districtId && x.AnnouncementApplicationId == announcementAppId);
@@ -18,7 +26,7 @@ namespace Youtube.Logic
 
         public void Set(Guid districtId, int announcementAppId, string value)
         {
-            using (var context = new DataModelDataContext())
+            using (var context = new DataModelDataContext(connectionString))
             {
                 AnnouncementAssignment assignment;
                 assignment =

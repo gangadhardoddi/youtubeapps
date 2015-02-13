@@ -44,5 +44,7 @@ namespace ChalkableBaseAppLib
         {
             get { return RedirectUri; }
         }
+
+        public string ConnectionString { get;  set; }
     }
 }

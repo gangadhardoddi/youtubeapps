@@ -44,10 +44,15 @@ namespace ChalkableBaseAppLib
             for (var i = 0; i < items.Count; ++i)
             {
                 if (items[i].Environment == environment)
+                {
+                    var connectionString = ConfigurationManager.ConnectionStrings[environment].ToString();
+                    items[i].ConnectionString = connectionString;
                     return items[i];
+                }
             }
 
             return null;
         }
+
     }
 }

@@ -15,11 +15,11 @@
             <div class="video-list">
                 @for (var i = 0; i < Model.Videos.Count(); i++)
                 {
-                    @Helpers.VideoThumbnail(Html, Model.Videos.ElementAt(i), Model.AnnouncementApplicationId, Model.DistrictId)                        
                     if(i % 2 == 0)
                     {
                         @:<div class="row">
                     }
+                    @Helpers.VideoThumbnail(Html, Model.Videos.ElementAt(i), Model.AnnouncementApplicationId, Model.DistrictId)                        
                     
                     if (i % 2 == 1 || i == Model.Videos.Count() - 1)
                     {

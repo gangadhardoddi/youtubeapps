@@ -56,7 +56,7 @@ namespace Youtube.Controllers
 
         public ActionResult Preview(string id, int announcementApplicationId, Guid districtId)
         {
-            var storage = new Storage();
+            var storage = new Storage(Configuration.ConnectionString);
             storage.Set(districtId, announcementApplicationId, id);
             var connector = new YoutubeConnector();
             var video = connector.GetById(id);
@@ -69,7 +69,7 @@ namespace Youtube.Controllers
 
         public ActionResult Video(int announcementApplicationId, Guid districtId)
         {
-            var storage = new Storage();
+            var storage = new Storage(Configuration.ConnectionString);
             var videoId = storage.Get(districtId, announcementApplicationId);
             var video = (new YoutubeConnector()).GetById(videoId);
             ViewData["ReadyToAttach"] = true;
