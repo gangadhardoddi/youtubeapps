@@ -27,15 +27,15 @@
         {
             {"announcementApplicationId", announcementAppId},
             {"districtId", districtId}
-        });
+        })
     </div>
 }
 
 
-@helper SearchQuery()
+@helper SearchQuery(string value)
 {
     <div class="query-container">
-        <input id="query"  placeholder="Video topic or URL" name="query" type="text" value="">
+        <input id="query" placeholder="Video topic or Standard" name="query" type="text" value="@value">
         <input type="submit" id="search-button" value=""/>
     </div>        
 }
