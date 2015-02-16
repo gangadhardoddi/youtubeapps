@@ -49,7 +49,7 @@ namespace Youtube.Controllers
                 DistrictId = districtId
             };
             var connector = new YoutubeConnector();
-            var videos = connector.Search(query + "+" + standardQuery);
+            var videos = connector.Search("gobstoppervideos " + query + " " + standardQuery);
             searchModel.Videos = videos.Select(VideoModel.Create);
             return View("Edit", searchModel);
         }
