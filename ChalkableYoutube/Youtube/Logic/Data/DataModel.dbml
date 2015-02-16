@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="youtube-dev" Class="DataModelDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="WebSettings" ConnectionString="Data Source=qvi4pmue7v.database.windows.net;Initial Catalog=youtube-dev;Persist Security Info=True;User ID=chalkableadmin" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="youtube_devConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.AnnouncementAssignment" Member="AnnouncementAssignments">
+    <Type Name="AnnouncementAssignment">
+      <Column Name="DistrictId" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="AnnouncementApplicationId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="YoutubeId" Type="System.String" DbType="NVarChar(2048) NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+</Database>

@@ -1,0 +1,16 @@
+﻿@model Youtube.Models.VideoModel
+@{
+    ViewBag.Title = "Preview";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@Helpers.AppLogo(Html, Model.AnnouncementApplicationId, Model.DistrictId)
+
+@using (Html.BeginForm("Edit", "Home")) {    
+    <div>
+        @Html.Hidden("announcementApplicationId", Model.AnnouncementApplicationId)
+        @Html.Hidden("districtId", Model.DistrictId)
+        @Helpers.SearchQuery()    
+    </div>
+}
+
+@Helpers.YoutubeIframe(Model)
