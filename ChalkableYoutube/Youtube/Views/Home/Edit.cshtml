@@ -10,7 +10,7 @@
     <div>
         @Html.Hidden("count", Model.Videos.Count(), new {id = "videos-count"})
         @Html.Hidden("standardQuery", Model.StandardQuery)
-        @Helpers.SearchQuery()
+        @Helpers.SearchQuery(Model.Query)
         <div class="video-list-container">
             <div class="video-list">
                 @for (var i = 0; i < Model.Videos.Count(); i++)

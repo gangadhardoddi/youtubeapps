@@ -111,7 +111,7 @@ namespace Youtube.Controllers
                     p.Add(standardNameParam);
             }
 
-            return string.Join("+", p);
+            return string.Join(" ", p);
         }
     }
 

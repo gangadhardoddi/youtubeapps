@@ -12,7 +12,7 @@ namespace Youtube.Logic
 {
     public class YoutubeConnector
     {
-        public IEnumerable<Video> Search(string videoQuery, int start = 0, int count = 20)
+        public IEnumerable<Video> Search(string videoQuery, int start = 0, int count = 50)
         {
             var author = "";
             var orderby = "";
