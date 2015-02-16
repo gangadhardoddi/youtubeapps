@@ -44,12 +44,12 @@ namespace Youtube.Controllers
             }
             var searchModel = new SearchModel
             {
-                Query = query + "+" + standardQuery,
+                Query = query,
                 AnnouncementApplicationId = announcementApplicationId,
                 DistrictId = districtId
             };
             var connector = new YoutubeConnector();
-            var videos = connector.Search(searchModel.Query);
+            var videos = connector.Search("gobstoppervideos " + query + " " + standardQuery);
             searchModel.Videos = videos.Select(VideoModel.Create);
             return View("Edit", searchModel);
         }
