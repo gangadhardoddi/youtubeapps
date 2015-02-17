@@ -104,10 +104,9 @@ namespace Youtube.Controllers
                 if (string.IsNullOrWhiteSpace(standardNameParam) && string.IsNullOrWhiteSpace(ccstandardCodeParam))
                     break;
 
-                if (!string.IsNullOrWhiteSpace(standardNameParam))
-                    p.Add(standardNameParam);
-
                 if (!string.IsNullOrWhiteSpace(ccstandardCodeParam))
+                    p.Add(ccstandardCodeParam);
+                else if (!string.IsNullOrWhiteSpace(standardNameParam))
                     p.Add(standardNameParam);
             }
 

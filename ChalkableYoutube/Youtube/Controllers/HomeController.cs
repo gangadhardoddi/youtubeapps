@@ -4,7 +4,6 @@ using System.Web.Mvc;
 using System.Web.Routing;
 using ChalkableBaseAppLib;
 using Youtube.Logic;
-using Youtube.Logic.Dto;
 using Youtube.Models;
 
 namespace Youtube.Controllers
@@ -18,14 +17,25 @@ namespace Youtube.Controllers
                 var chalkableConnector = new ChalkableConnector(OauthClient, ApiRoot);
                 var me = chalkableConnector.GetMe();
 
+                var query = StandardSearchQuery;
+
+                if (Mode == Settings.EDIT_MODE && string.IsNullOrWhiteSpace(query))
+                {
+                    var announcementApplication = chalkableConnector.GetAnnouncementApplicationById(AnnouncementApplicationId);
+                    var announcement = chalkableConnector.GetAnnouncementById(announcementApplication.data.announcementid);
+                    query = announcement.data.classname;
+                }
+
                 var actionParams = new RouteValueDictionary
                 {
                     {"announcementApplicationId", AnnouncementApplicationId},
                     {"districtId", me.data.districtid},
-                    {"standardQuery", StandardSearchQuery}
+                    {"query", query}
                 };
-                if (Mode == Settings.EDIT_MODE)     
+
+                if (Mode == Settings.EDIT_MODE || Mode == Settings.MY_VIEW_MODE)     
                     return RedirectToAction("Edit", actionParams);
+
                 if (Mode == Settings.VIEW_MODE || Mode == Settings.SUMMARY_VIEW_MODE || Mode == Settings.GRADING_VIEW_MODE)
                     return RedirectToAction("Video", actionParams);
             }
@@ -35,21 +45,16 @@ namespace Youtube.Controllers
 
         public ActionResult Edit(string query, int announcementApplicationId, Guid districtId, string standardQuery, int? count = 9)
         {
-            if (string.IsNullOrEmpty(query) )
-            {
-                var chalkableConnector = new ChalkableConnector(OauthClient, ApiRoot);
-                var announcementApplication = chalkableConnector.GetAnnouncementApplicationById(announcementApplicationId);
-                var announcement = chalkableConnector.GetAnnouncementById(announcementApplication.data.announcementid);
-                query = announcement.data.classname;
-            }
+            query = query ?? "";
             var searchModel = new SearchModel
             {
-                Query = query,
+                Query = query.Trim(),
                 AnnouncementApplicationId = announcementApplicationId,
                 DistrictId = districtId
             };
+            query = "learnzillionvideo " + query;
             var connector = new YoutubeConnector();
-            var videos = connector.Search("learnzillionvideo " + query + " " + standardQuery);
+            var videos = connector.Search(query.Trim());
             searchModel.Videos = videos.Select(VideoModel.Create);
             return View("Edit", searchModel);
         }
