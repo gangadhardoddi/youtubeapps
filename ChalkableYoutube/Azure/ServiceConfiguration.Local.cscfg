@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ServiceConfiguration serviceName="Azure" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceConfiguration" osFamily="1" osVersion="*" schemaVersion="2014-06.2.4">
+  <Role name="Youtube">
+    <Instances count="1" />
+    <ConfigurationSettings>
+      <!--staging-->
+      <!--<Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="DefaultEndpointsProtocol=https;AccountName=chalkableyoutube;AccountKey=vXRnsalkAS8S8HGr4AflrJ3/Q5+T+cdg16feYoOE9UoNk9o68Dz1T5w9cP/lUSYOheD1/60X1Ix1j7RR+U9DBw==" />-->
+      <!--production-->
+      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="DefaultEndpointsProtocol=https;AccountName=chalkableschoolyoutube;AccountKey=NlzCyTofu9auMQ0V1es6viqLlPjmhY71SfRJF3Cwet55u2PZsHnfBH08H7kaE2vQ8zeJCPPNWH/sChhUJ/I47Q==" />
+    </ConfigurationSettings>
+  </Role>
+</ServiceConfiguration>

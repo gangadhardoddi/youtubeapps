@@ -1,0 +1,68 @@
+﻿@using System.CodeDom.Compiler
+@using System.Web.Mvc
+@using System.Web.Mvc.Html
+@using System.Web.Routing
+@using Youtube.Models
+@using HtmlHelper = System.Web.Mvc.HtmlHelper
+
+@helper YoutubeIframe(VideoModel video, int width = 645, int height = 395)
+{
+    string path = "https://www.youtube.com/embed/" + video.Id;
+    <div class="preview">
+    <iframe width="@width" height="@height" src="@path" frameborder="0" allowfullscreen></iframe>
+        <br />
+        <div class="uploaded-by">uploaded by: @video.UploadedBy <br /></div>
+        <div class="views-count">@video.Views</div>
+        <div class="clear-fix"></div>
+        @video.Description 
+        <br />
+        <br />
+    </div>    
+}
+
+@helper AppLogo(HtmlHelper Html, int announcementAppId, Guid districtId)
+{
+    <div class="app-logo">@Html.ActionLink("cancel", "Edit", 
+        new RouteValueDictionary
+        {
+            {"announcementApplicationId", announcementAppId},
+            {"districtId", districtId}
+        })
+    </div>
+}
+
+
+@helper SearchQuery(string value ="")
+{
+    <div class="query-container">
+        <input id="query" placeholder="Video topic or Standard" name="query" type="text" value="@value">
+        <input type="submit" id="search-button" value=""/>
+    </div>        
+}
+
+
+@helper VideoThumbnail(HtmlHelper Html, VideoModel video, int announcementAppId, Guid districtId)
+{
+    var imgSrc = "https://i4.ytimg.com/vi/" + video.Id + "/mqdefault.jpg";
+    
+    <div class="video-list-item">
+        <div class="video-thumbnail-container">
+            <div class="video-thumbnail">
+                <img width="200" height="110" src="@imgSrc" alt="@imgSrc"/>
+                <div class="duration">@video.Duration</div>
+            </div>
+        </div>
+        <div class="video-thumbnail-container description-container">
+            <h2>
+                @Html.ActionLink(video.ShortTitle, "Preview", new RouteValueDictionary
+                {
+                    { "id", video.Id }, 
+                    { "announcementApplicationId", announcementAppId},
+                    {"districtId", districtId}
+                })                    
+            </h2>
+            <div class="description">@video.ShortDescription</div>
+            <div class="uploaded-edit">by @video.UploadedBy | @video.Views views</div>
+        </div>
+    </div>
+}
