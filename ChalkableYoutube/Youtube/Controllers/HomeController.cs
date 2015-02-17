@@ -52,6 +52,7 @@ namespace Youtube.Controllers
                 AnnouncementApplicationId = announcementApplicationId,
                 DistrictId = districtId
             };
+            query = "learnzillionvideo " + query;
             var connector = new YoutubeConnector();
             var videos = connector.Search(query.Trim());
             searchModel.Videos = videos.Select(VideoModel.Create);
