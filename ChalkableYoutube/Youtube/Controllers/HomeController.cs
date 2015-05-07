@@ -54,8 +54,7 @@ namespace Youtube.Controllers
             };
             query = "gobstoppervideos " + query;
             var connector = new YoutubeConnector();
-            var videos = connector.Search(query.Trim());
-            searchModel.Videos = videos.Select(VideoModel.Create);
+            searchModel.Videos = connector.Search(query.Trim());
             return View("Edit", searchModel);
         }
 
@@ -64,8 +63,7 @@ namespace Youtube.Controllers
             var storage = new Storage(Configuration.ConnectionString);
             storage.Set(districtId, announcementApplicationId, id);
             var connector = new YoutubeConnector();
-            var video = connector.GetById(id);
-            var model = VideoModel.Create(video, announcementApplicationId);
+            var model = connector.GetById(id);
             model.AnnouncementApplicationId = announcementApplicationId;
             model.DistrictId = districtId;
             ViewData["ReadyToAttach"] = true;
@@ -76,9 +74,8 @@ namespace Youtube.Controllers
         {
             var storage = new Storage(Configuration.ConnectionString);
             var videoId = storage.Get(districtId, announcementApplicationId);
-            var video = (new YoutubeConnector()).GetById(videoId);
+            var model = (new YoutubeConnector()).GetById(videoId);
             ViewData["ReadyToAttach"] = true;
-            var model = VideoModel.Create(video, announcementApplicationId);
             model.AnnouncementApplicationId = announcementApplicationId;
             return View("Video", model);
         }
