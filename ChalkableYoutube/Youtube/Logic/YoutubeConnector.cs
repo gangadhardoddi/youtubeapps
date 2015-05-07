@@ -1,88 +1,110 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Web;
-using Google.GData.Client;
-using Google.GData.YouTube;
-using Google.YouTube;
+using System.Xml;
+using Google.Apis.Services;
+using Google.Apis.YouTube.v3;
+using Google.Apis.YouTube.v3.Data;
+using Youtube.Models;
 
 namespace Youtube.Logic
 {
     public class YoutubeConnector
     {
-        public IEnumerable<Video> Search(string videoQuery, int start = 0, int count = 50)
+        private string GooglePublicAPIKey
         {
-            var author = "";
-            var orderby = "";
-            var time = "All Time";
-            var category = "";
-            var query = new YouTubeQuery(YouTubeQuery.DefaultVideoUri);
-            if (!string.IsNullOrEmpty(videoQuery))
+            get
             {
-                query.Query = videoQuery;
+                var value = ConfigurationManager.AppSettings["GooglePublicAPIkey"];
+
+                if (string.IsNullOrWhiteSpace(value))
+                {
+                    throw new Exception("Please configure GooglePublicAPIkey in Web.config/appSettings");
+                }
+
+                return value;
             }
-            if (!string.IsNullOrEmpty(author))
-            {
-                query.Author = author;
-            }
-            if (!string.IsNullOrEmpty(orderby))
-            {
-                query.OrderBy = orderby;
-            }
-            query.SafeSearch = YouTubeQuery.SafeSearchValues.None;
-            if (String.IsNullOrEmpty(time) != true)
-            {
-                if (time == "All Time")
-                    query.Time = YouTubeQuery.UploadTime.AllTime;
-                else if (time == "Today")
-                    query.Time = YouTubeQuery.UploadTime.Today;
-                else if (time == "This Week")
-                    query.Time = YouTubeQuery.UploadTime.ThisWeek;
-                else if (time == "This Month")
-                    query.Time = YouTubeQuery.UploadTime.ThisMonth;
-            }
-            if (String.IsNullOrEmpty(category) != true)
-            {
-                QueryCategory q = new QueryCategory(new AtomCategory(category));
-                query.Categories.Add(q);
-            }
-            var res = GetVideos(query);
-            return res.Skip(start).Take(count);
         }
 
-        public static YouTubeRequest GetRequest()
+        public IEnumerable<VideoModel> Search(string videoQuery)
         {
-            var settings = new YouTubeRequestSettings("Chalkable Youtube app",
-                "AI39si6y_3ZKWG2A4_-v5ogSal_5Y41jmsiQ3aYD0AUVHBTT7mNjOAhh1r24xJWUkki67hLg0l4EXZHS-d4h-kysPd9yGAV0Wg")
+            var youtubeService = GetYoutubeService();
+
+            var searchListRequest = youtubeService.Search.List("snippet");
+            searchListRequest.Q = videoQuery;
+            searchListRequest.MaxResults = 50;
+
+            // Call the search.list method to retrieve results matching the specified query term.
+            var searchListResponse = searchListRequest.Execute();
+
+            var videoIds = new List<string>();
+
+            // Add each result to the appropriate list, and then display the lists of
+            // matching videos, channels, and playlists.
+            foreach (var searchResult in searchListResponse.Items)
             {
-                AutoPaging = true
-            };
-            return new YouTubeRequest(settings);
+                switch (searchResult.Id.Kind)
+                {
+                    case "youtube#video":
+                        videoIds.Add(searchResult.Id.VideoId);
+                        break;
+                }
+            }            
+
+            return GetVideoInfo(youtubeService, videoIds.ToArray());
         }
 
-        private static IEnumerable<Video> GetVideos(YouTubeQuery q)
+        private YouTubeService GetYoutubeService()
         {
-            var request = GetRequest();
-            Feed<Video> feed = null;
-            try
+            return new YouTubeService(new BaseClientService.Initializer()
             {
-                feed = request.Get<Video>(q);
-            }
-            catch (GDataRequestException gdre)
-            {
-                var response = (HttpWebResponse)gdre.Response;
-            }
-            return feed != null ? feed.Entries : null;
+                ApiKey = GooglePublicAPIKey,
+                ApplicationName = this.GetType().ToString()
+            });
         }
 
-        public Video GetById(string id)
+        private static IEnumerable<VideoModel> GetVideoInfo(YouTubeService youtubeService, string[] videoIds)
         {
-            var query = new YouTubeQuery(YouTubeQuery.DefaultVideoUri + "/" + id);
-            var res = GetVideos(query);
-            var v = res.FirstOrDefault();
-            return v;
+            var videoListRequest = youtubeService.Videos.List("snippet,contentDetails,statistics");
+            videoListRequest.Id = string.Join(",", videoIds);
+            videoListRequest.MaxResults = 50;
+
+            var videoListResponse = videoListRequest.Execute();
+
+            var videos = new List<VideoModel>();
+
+            // Add each result to the appropriate list, and then display the lists of
+            // matching videos, channels, and playlists.
+            foreach (var videoResult in videoListResponse.Items)
+            {
+                switch (videoResult.Kind)
+                {
+                    case "youtube#video":
+                        videos.Add(new VideoModel
+                        {
+                            Id = videoResult.Id,
+                            Title = videoResult.Snippet.Title,
+                            Description = videoResult.Snippet.Description,
+                            Views = videoResult.Statistics.ViewCount ?? 0,
+                            UploadedBy = videoResult.Snippet.ChannelTitle,
+                            Duration = XmlConvert.ToTimeSpan(videoResult.ContentDetails.Duration).ToString()
+                        });
+                        break;
+                }
+            }
+
+            return videos;
+        }
+
+        public VideoModel GetById(string id)
+        {
+            var youtubeService = GetYoutubeService();
+            return GetVideoInfo(youtubeService, new[] {id}).FirstOrDefault();
         }
     }
 }
