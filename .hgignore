@@ -1,4 +1,11 @@
 syntax: glob
+**/bin/**/*
+**/*.user
+**/obj/**/*
+**/csx/**/*
+*.user
+*.suo
+**/bin/*
 ChalkableBaseAppLib/ChalkableBaseAppLib/bin/*
 ChalkableBaseAppLib/ChalkableBaseAppLib/obj/*
 ChalkableBaseAppLib/ChalkableBaseAppLib/ChalkableBaseAppLib.csproj.user
@@ -17,3 +24,4 @@ ChalkableYoutube/Azure/csx/Debug/*
 ChalkableYoutube/Azure/obj/Debug/*
 ChalkableYoutube/Youtube/*trace.log
 ChalkableYoutube/packages/*
+Chalkable.Apps/packages/*
