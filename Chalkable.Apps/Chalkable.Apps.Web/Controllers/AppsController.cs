@@ -32,13 +32,38 @@ namespace Chalkable.Apps.Web.Controllers {
 
         private static List<Models.Standard> BuildStandardsList(List<int?> ids, List<string> codes, List<string> names) {
             var standards = new List<Models.Standard>();
-            if (!ids.IsNullOrEmpty() && !codes.IsNullOrEmpty() && !names.IsNullOrEmpty()) {
-                var itemCount = new[] { ids.Count, codes.Count, names.Count }.Max();
+
+            var idCount = 0;
+            var codeCount = 0;
+            var nameCount = 0;
+
+            if (!ids.IsNullOrEmpty()) {
+                idCount = ids.Count;
+            }
+            if (!codes.IsNullOrEmpty()) {
+                codeCount = codes.Count;
+            }
+            if (!names.IsNullOrEmpty()) {
+                nameCount = names.Count;
+            }
+
+            if (idCount > 0 || codeCount > 0 || nameCount > 0) {
+                
+                var itemCount = new[] { idCount, codeCount, nameCount }.Max();
                 for (int i = 0; i < itemCount; i++) {
                     var standard = new Models.Standard();
-                    standard.CommonCoreCode = codes[i];
-                    standard.Name = names[i];
-                    standard.StandardId = ids[i];
+
+                    if (!codes.IsNullOrEmpty()) {
+                        standard.CommonCoreCode = codes[i];
+                    }
+
+                    if (!names.IsNullOrEmpty()) {
+                        standard.Name = names[i];
+                    }
+
+                    if (!ids.IsNullOrEmpty()) {
+                        standard.StandardId = ids[i];
+                    }
                     standards.Add(standard);
                 }
             }
