@@ -128,10 +128,9 @@ namespace Youtube.Controllers
                 {
                     var codes = new List<string>();
                     var standardsRelations = await chalkableConnector.Standards.GetListOfStandardRelations(standardsGuids);
+                    codes.AddRange(standardsRelations.Where(x=>!string.IsNullOrEmpty(x.CurrentStandard.Code)).Select(x=>x.CurrentStandard.Code));
                     foreach (var standardsRelation in standardsRelations)
                     {
-                        if (!string.IsNullOrEmpty(standardsRelation.CurrentStandard.Code))
-                            codes.Add(standardsRelation.CurrentStandard.Code);
                         if (standardsRelation.Derivatives != null)
                             codes.AddRange(standardsRelation.Derivatives.Where(x => !string.IsNullOrEmpty(x.Code)).Select(x => x.Code));
                         if (standardsRelation.Origins != null)
@@ -139,7 +138,7 @@ namespace Youtube.Controllers
                         if (standardsRelation.RelatedDerivatives != null)
                             codes.AddRange(standardsRelation.RelatedDerivatives.Where(x => !string.IsNullOrEmpty(x.Code)).Select(x => x.Code));
                     }
-                    return codes.JoinString();
+                    return codes.Take(20).JoinString();
                 }
             }
             return null;
