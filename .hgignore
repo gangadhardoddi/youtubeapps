@@ -25,3 +25,4 @@ ChalkableYoutube/Azure/obj/Debug/*
 ChalkableYoutube/Youtube/*trace.log
 ChalkableYoutube/packages/*
 Chalkable.Apps/packages/*
+ChalkableYoutube/.vs/config/applicationhost.config

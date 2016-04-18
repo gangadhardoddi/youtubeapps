@@ -1,15 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Diagnostics;
-using System.Globalization;
 using System.Linq;
-using System.Net;
-using System.Web;
 using System.Xml;
 using Google.Apis.Services;
 using Google.Apis.YouTube.v3;
-using Google.Apis.YouTube.v3.Data;
 using Youtube.Models;
 
 namespace Youtube.Logic

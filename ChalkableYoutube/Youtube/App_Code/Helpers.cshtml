@@ -1,15 +1,13 @@
-﻿@using System.CodeDom.Compiler
-@using System.Web.Mvc
+﻿@using System.Web.Mvc
 @using System.Web.Mvc.Html
 @using System.Web.Routing
 @using Youtube.Models
-@using HtmlHelper = System.Web.Mvc.HtmlHelper
 
 @helper YoutubeIframe(VideoModel video, int width = 645, int height = 395)
 {
     string path = "https://www.youtube.com/embed/" + video.Id;
     <div class="preview">
-    <iframe width="@width" height="@height" src="@path" frameborder="0" allowfullscreen></iframe>
+    <iframe width="@width" height="@height" src="@path" allowfullscreen></iframe>
         <br />
         <div class="uploaded-by">uploaded by: @video.UploadedBy <br /></div>
         <div class="views-count">@video.Views</div>
@@ -20,7 +18,7 @@
     </div>    
 }
 
-@helper AppLogo(HtmlHelper Html, int announcementAppId, Guid districtId)
+@helper AppLogo(System.Web.Mvc.HtmlHelper Html, int announcementAppId, Guid districtId)
 {
     <div class="app-logo">@Html.ActionLink("cancel", "Edit", 
         new RouteValueDictionary
@@ -41,7 +39,7 @@
 }
 
 
-@helper VideoThumbnail(HtmlHelper Html, VideoModel video, int announcementAppId, Guid districtId)
+@helper VideoThumbnail(System.Web.Mvc.HtmlHelper Html, VideoModel video, int announcementAppId, Guid districtId)
 {
     var imgSrc = "https://i4.ytimg.com/vi/" + video.Id + "/mqdefault.jpg";
     

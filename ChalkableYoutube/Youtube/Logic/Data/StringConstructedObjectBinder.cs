@@ -20,8 +20,8 @@ namespace Youtube.Logic.Data
             }
             catch (Exception ex)
             {
-                string message = string.Format("Unable to locate a valid value for query string parameter '{0}'",
-                                               bindingContext.ModelName);
+                string message =
+                    $"Unable to locate a valid value for query string parameter '{bindingContext.ModelName}'";
                 throw new ApplicationException(message, ex);
             }
         }
