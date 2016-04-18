@@ -68,6 +68,7 @@ namespace Youtube.Controllers
                 AnnouncementApplicationId = announcementApplicationId,
                 DistrictId = districtId
             };
+            query = "learnzillionvideo " + query;
             var connector = new YoutubeConnector();
             searchModel.Videos = connector.Search(query.Trim());
             return View("Edit", searchModel);
