@@ -20,7 +20,7 @@ namespace Youtube.Logic
             {
                 var res = context.AnnouncementAssignments.FirstOrDefault(
                     x => x.DistrictId == districtId && x.AnnouncementApplicationId == announcementAppId);
-                return res != null ? res.YoutubeId : null;
+                return res?.YoutubeId;
             }
         }
 
@@ -28,10 +28,8 @@ namespace Youtube.Logic
         {
             using (var context = new DataModelDataContext(connectionString))
             {
-                AnnouncementAssignment assignment;
-                assignment =
-                    context.AnnouncementAssignments.FirstOrDefault(
-                        x => x.AnnouncementApplicationId == announcementAppId && x.DistrictId == districtId);
+                var assignment = context.AnnouncementAssignments.FirstOrDefault(
+                    x => x.AnnouncementApplicationId == announcementAppId && x.DistrictId == districtId);
                 if (assignment == null)
                 {
                     assignment = new AnnouncementAssignment

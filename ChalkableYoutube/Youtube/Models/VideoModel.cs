@@ -1,5 +1,4 @@
 using System;
-using Google.Apis.YouTube.v3.Data;
 
 namespace Youtube.Models
 {

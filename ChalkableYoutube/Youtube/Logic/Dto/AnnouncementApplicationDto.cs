@@ -10,7 +10,7 @@ namespace Youtube.Logic.Dto
         public int? currentpersonid { get; set; }
         public bool active { get; set; }
         public string name { get; set; }
-        public Guid applicationid { get { return id; } }
+        public Guid applicationid => id;
     }
 
     public class AnnouncementApplicationDto

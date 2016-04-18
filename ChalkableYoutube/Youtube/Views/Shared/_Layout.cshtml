@@ -1,6 +1,4 @@
-﻿@using ChalkableBaseAppLib
-@using Youtube.Logic
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta http-equiv="Cache-Control" content="no-cache" />
@@ -11,7 +9,10 @@
     <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
     <meta name="viewport" content="width=device-width" />
     @Styles.Render("~/Content/css")
-    @Scripts.Render(ViewBag.ApiRoot + "/scripts/api/chlk-post-message-api.js")
+
+    <script src="/Scripts/jquery-2.2.3.min.js"></script>
+
+    @Scripts.Render(ViewBag.ApiRoot + "/scripts/api/chlk-js-api.js")
         
 
     @RenderSection("headerscripts", required: false)
@@ -21,13 +22,10 @@
     {
         ViewData["ReadyToAttach"] = false;
     }
-            
+
     <script type="text/javascript">
-        CHLK_MESSENGER.addYourself(function () {
-            var isReady = '@ViewData["ReadyToAttach"]';
-            return isReady == 'True';
-        });
-            
+        var isReady = '@ViewBag.ReadyToAttach' == 'True';
+        CHLK_API.setReady(isReady);
     </script>
 </head>
 <body>        
