@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 14
+VisualStudioVersion = 14.0.24720.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Youtube", "Youtube\Youtube.csproj", "{55576724-A886-42F0-9B8F-161093652E63}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{EB20D137-FED8-4650-8A88-595E780224E5}"
@@ -9,8 +11,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{EB20D1
 		.nuget\NuGet.exe = .nuget\NuGet.exe
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChalkableBaseAppLib", "..\ChalkableBaseAppLib\ChalkableBaseAppLib\ChalkableBaseAppLib.csproj", "{51AD2DDA-88BB-4188-A4AC-7A941FDA692B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -22,10 +22,6 @@ Global
 		{55576724-A886-42F0-9B8F-161093652E63}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{55576724-A886-42F0-9B8F-161093652E63}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{55576724-A886-42F0-9B8F-161093652E63}.Release|Any CPU.Build.0 = Release|Any CPU
-		{51AD2DDA-88BB-4188-A4AC-7A941FDA692B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{51AD2DDA-88BB-4188-A4AC-7A941FDA692B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{51AD2DDA-88BB-4188-A4AC-7A941FDA692B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{51AD2DDA-88BB-4188-A4AC-7A941FDA692B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
