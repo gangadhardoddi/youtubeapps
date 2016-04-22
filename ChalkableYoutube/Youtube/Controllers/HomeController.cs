@@ -25,6 +25,7 @@ namespace Youtube.Controllers
             var actionParams = new RouteValueDictionary
                 {
                     {"announcementApplicationId", announcementApplicationId},
+                    {"applicationInstallId", applicationInstallId },
                     {"districtId",CurrentUser.DistrictId},
                 };
 
@@ -59,13 +60,13 @@ namespace Youtube.Controllers
         }
 
 
-        public ActionResult Edit(string query, int announcementApplicationId, Guid districtId, int? count = 9)
+        public ActionResult Edit(string query, int? announcementApplicationId, Guid districtId, int? applicationInstallId, int? count = 9)
         {
             query = query ?? "";
             var searchModel = new SearchModel
             {
                 Query = query.Trim(),
-                AnnouncementApplicationId = announcementApplicationId,
+                AnnouncementApplicationId = (announcementApplicationId ?? applicationInstallId).Value,
                 DistrictId = districtId
             };
             var connector = new YoutubeConnector();
