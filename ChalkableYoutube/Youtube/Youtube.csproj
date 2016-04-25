@@ -285,6 +285,7 @@
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <None Include="Properties\PublishProfiles\youtube-dev.pubxml" />
+    <None Include="Properties\PublishProfiles\youtube-prod.pubxml" />
     <None Include="Properties\PublishProfiles\youtube-qa.pubxml" />
     <None Include="Scripts\jquery-2.2.3.intellisense.js" />
     <Content Include="Scripts\jquery-2.2.3.js" />
