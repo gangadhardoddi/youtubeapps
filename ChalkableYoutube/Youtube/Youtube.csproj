@@ -287,7 +287,9 @@
     <None Include="Properties\PublishProfiles\learningzillion-qa.pubxml" />
     <None Include="Properties\PublishProfiles\learnzillion-dev.pubxml" />
     <None Include="Properties\PublishProfiles\youtube-dev.pubxml" />
+    <None Include="Properties\PublishProfiles\youtube-prod.pubxml" />
     <None Include="Properties\PublishProfiles\youtube-qa.pubxml" />
+    <None Include="Properties\PublishProfiles\youtube-sup.pubxml" />
     <None Include="Scripts\jquery-2.2.3.intellisense.js" />
     <Content Include="Scripts\jquery-2.2.3.js" />
     <Content Include="Scripts\jquery-2.2.3.min.js" />
