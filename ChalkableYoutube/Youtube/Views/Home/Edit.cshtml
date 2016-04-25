@@ -12,21 +12,29 @@
         @Html.Hidden("standardQuery", Model.StandardQuery)
         @Helpers.SearchQuery(Model.Query)
         <div class="video-list-container">
-            <div class="video-list">
-                @for (var i = 0; i < Model.Videos.Count(); i++)
-                {
-                    if(i % 2 == 0)
+            @if (Model.Videos.Any())
+            {
+                <div class="video-list">
+                    @for (var i = 0; i < Model.Videos.Count(); i++)
                     {
-                        @:<div class="row">
+                        if (i % 2 == 0)
+                        {
+                            @: <div class="row">
+                        }
+                        @Helpers.VideoThumbnail(Html, Model.Videos.ElementAt(i), Model.AnnouncementApplicationId, Model.DistrictId)
+
+                        if (i % 2 == 1 || i == Model.Videos.Count() - 1)
+                        {
+                            @: </div>
+                        }
                     }
-                    @Helpers.VideoThumbnail(Html, Model.Videos.ElementAt(i), Model.AnnouncementApplicationId, Model.DistrictId)                        
-                    
-                    if (i % 2 == 1 || i == Model.Videos.Count() - 1)
-                    {
-                        @:</div>
-                    }
-                }
-            </div>
+                </div>
+            }
+            else
+            {
+                @:<div style="font: bold 22px/260px Reenie Beanie; text-align: center; height: 260px;"> No videos found</div>
+            }
+            
         </div>
     </div>
 }
