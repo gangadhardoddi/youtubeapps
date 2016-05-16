@@ -39,7 +39,7 @@
 }
 
 
-@helper VideoThumbnail(System.Web.Mvc.HtmlHelper Html, VideoModel video, int announcementAppId, Guid districtId)
+@helper VideoThumbnail(System.Web.Mvc.HtmlHelper Html, VideoModel video, int announcementAppId, Guid districtId, bool myAppsView)
 {
     var imgSrc = "https://i4.ytimg.com/vi/" + video.Id + "/mqdefault.jpg";
     
@@ -52,7 +52,7 @@
         </div>
         <div class="video-thumbnail-container description-container">
             <h2>
-                @Html.ActionLink(video.ShortTitle, "Preview", new RouteValueDictionary
+                @Html.ActionLink(video.ShortTitle, myAppsView ? "ViewVideo":"Preview", new RouteValueDictionary
                 {
                     { "id", video.Id }, 
                     { "announcementApplicationId", announcementAppId},
