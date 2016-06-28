@@ -15,7 +15,7 @@ namespace Youtube.Controllers
     public class HomeController : Chalkable.API.Controllers.HomeController
     {
         protected override async Task<ActionResult> ResolveAction(string mode, int? announcementApplicationId, int? studentId, int? announcementId,
-            int? announcementType, int? attributeId, int? applicationInstallId, IEnumerable<StandardInfo> standards, string contentId)
+            int? announcementType, int? attributeId, IEnumerable<StandardInfo> standards, string contentId)
         {
             await Task.Delay(0);
 
