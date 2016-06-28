@@ -31,7 +31,8 @@ namespace Youtube.Logic
             var youtubeService = GetYoutubeService();
 
             var searchListRequest = youtubeService.Search.List("snippet");
-            searchListRequest.Q = videoQuery;
+            if(!string.IsNullOrWhiteSpace(videoQuery))
+                searchListRequest.Q = videoQuery;
             searchListRequest.MaxResults = 50;
 
             // Call the search.list method to retrieve results matching the specified query term.

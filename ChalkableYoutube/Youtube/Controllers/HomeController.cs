@@ -15,7 +15,7 @@ namespace Youtube.Controllers
     public class HomeController : Chalkable.API.Controllers.HomeController
     {
         protected override async Task<ActionResult> ResolveAction(string mode, int? announcementApplicationId, int? studentId, int? announcementId,
-            int? announcementType, int? attributeId, int? applicationInstallId, IEnumerable<StandardInfo> standards, string contentId)
+            int? announcementType, int? attributeId, IEnumerable<StandardInfo> standards, string contentId)
         {
             await Task.Delay(0);
 
@@ -25,7 +25,6 @@ namespace Youtube.Controllers
             var actionParams = new RouteValueDictionary
                 {
                     {"announcementApplicationId", announcementApplicationId},
-                    {"applicationInstallId", applicationInstallId },
                     {"districtId",CurrentUser.DistrictId},
                 };
 
@@ -33,9 +32,11 @@ namespace Youtube.Controllers
             {
                 case Settings.EDIT_MODE:
                     actionParams.Add("query", await BuildSearchQeury(standards, announcementApplicationId));
+                    actionParams.Add("myAppsView", false);
                     return RedirectToAction("Edit", actionParams);
                 case Settings.MY_VIEW_MODE:
-                    actionParams.Add("query", await BuildSearchQeury(standards, announcementApplicationId));
+                    actionParams.Add("myAppsView", true);
+                    //actionParams.Add("query", await BuildSearchQeury(standards, announcementApplicationId));
                     return RedirectToAction("Edit", actionParams);
                 case Settings.VIEW_MODE:
                     return RedirectToAction("Video", actionParams);
@@ -60,19 +61,29 @@ namespace Youtube.Controllers
         }
 
 
-        public ActionResult Edit(string query, int? announcementApplicationId, Guid districtId, int? applicationInstallId, int? count = 9)
+        public ActionResult Edit(string query, int? announcementApplicationId, Guid districtId, bool myAppsView = false, int? count = 9)
         {
             query = query ?? "";
             var searchModel = new SearchModel
             {
                 Query = query.Trim(),
-                AnnouncementApplicationId = (announcementApplicationId ?? applicationInstallId).Value,
-                DistrictId = districtId
+                AnnouncementApplicationId = announcementApplicationId ?? 0,
+                DistrictId = districtId,
+                IsMyAppsView = myAppsView
             };
             query = "learnzillionvideo " + query;
             var connector = new YoutubeConnector();
             searchModel.Videos = connector.Search(query.Trim());
             return View("Edit", searchModel);
+        }
+
+        public ActionResult ViewVideo(string id)
+        {
+            var connector = new YoutubeConnector();
+            var model = connector.GetById(id);
+            model.AnnouncementApplicationId = 0;
+            model.DistrictId = Guid.Empty;
+            return View("Preview", model);
         }
 
         public ActionResult Preview(string id, int announcementApplicationId, Guid districtId)
@@ -96,8 +107,6 @@ namespace Youtube.Controllers
             model.AnnouncementApplicationId = announcementApplicationId;
             return View("Video", model);
         }
-
-        
 
         private async Task<string> BuildSearchQeury(IEnumerable<StandardInfo> standardInfos, int? announcementApplicationId)
         {

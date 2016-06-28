@@ -21,7 +21,7 @@
                         {
                             @: <div class="row">
                         }
-                        @Helpers.VideoThumbnail(Html, Model.Videos.ElementAt(i), Model.AnnouncementApplicationId, Model.DistrictId)
+                        @Helpers.VideoThumbnail(Html, Model.Videos.ElementAt(i), Model.AnnouncementApplicationId, Model.DistrictId, Model.IsMyAppsView)
 
                         if (i % 2 == 1 || i == Model.Videos.Count() - 1)
                         {
