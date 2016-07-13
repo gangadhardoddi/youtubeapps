@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using System.Web.Routing;
 using Chalkable.API;
 using Chalkable.API.Helpers;
+using DotNetOpenAuth.Messaging;
 using Youtube.Logic;
 using Youtube.Models;
 using ChalkableConnector = Chalkable.API.ChalkableConnector;
@@ -31,12 +32,12 @@ namespace Youtube.Controllers
             switch (mode)
             {
                 case Settings.EDIT_MODE:
-                    actionParams.Add("query", await BuildSearchQeury(standards, announcementApplicationId));
+                    var queries = (await BuildSearchQuery(standards, announcementApplicationId)).JoinString(",");
+                    actionParams.Add("queries", queries);
                     actionParams.Add("myAppsView", false);
                     return RedirectToAction("Edit", actionParams);
                 case Settings.MY_VIEW_MODE:
                     actionParams.Add("myAppsView", true);
-                    //actionParams.Add("query", await BuildSearchQeury(standards, announcementApplicationId));
                     return RedirectToAction("Edit", actionParams);
                 case Settings.VIEW_MODE:
                     return RedirectToAction("Video", actionParams);
@@ -61,18 +62,26 @@ namespace Youtube.Controllers
         }
 
 
-        public ActionResult Edit(string query, int? announcementApplicationId, Guid districtId, bool myAppsView = false, int? count = 9)
+        public async Task<ActionResult> Edit(string queries, int? announcementApplicationId, Guid districtId, bool myAppsView = false, int? count = 9)
         {
-            query = query ?? "";
+            var query = string.IsNullOrWhiteSpace(queries) 
+                ? new List<string> { "" } 
+                : queries.Split(new[] {','}, StringSplitOptions.RemoveEmptyEntries).ToList();
+
             var searchModel = new SearchModel
             {
-                Query = query.Trim(),
+                Query = query.Select(x => x.Trim()).ToList(),
                 AnnouncementApplicationId = announcementApplicationId ?? 0,
                 DistrictId = districtId,
                 IsMyAppsView = myAppsView
             };
             var connector = new YoutubeConnector();
-            searchModel.Videos = connector.Search(query.Trim());
+            searchModel.Videos = new List<VideoModel>();
+
+            var videosTasks = query.Select(x => Task.Factory.StartNew(() => connector.Search(x).ToList())).ToList();
+            foreach(var videos in videosTasks)
+                searchModel.Videos.AddRange(await videos);
+
             return View("Edit", searchModel);
         }
 
@@ -107,12 +116,14 @@ namespace Youtube.Controllers
             return View("Video", model);
         }
 
-        private async Task<string> BuildSearchQeury(IEnumerable<StandardInfo> standardInfos, int? announcementApplicationId)
+        private async Task<IList<string>> BuildSearchQuery(IEnumerable<StandardInfo> standardInfos, int? announcementApplicationId)
         {
             var chalkableConnector = new ChalkableConnector(ChalkableAuthorization);
-            var query = await BuildStandardSearchQuery(standardInfos.ToList(), chalkableConnector);
-            if (string.IsNullOrEmpty(query) && announcementApplicationId.HasValue)
-                query = await GetClassName(announcementApplicationId.Value, chalkableConnector);
+            var query = await BuildStandardSearchQuery(standardInfos?.ToList(), chalkableConnector);
+
+            if (query.Count == 0 && announcementApplicationId.HasValue)
+                query.Add(await GetClassName(announcementApplicationId.Value, chalkableConnector));
+
             return query;
         }
 
@@ -123,7 +134,7 @@ namespace Youtube.Controllers
             return announcement?.ClassName;
         }
 
-        private async Task<string> BuildStandardSearchQuery(IEnumerable<StandardInfo> standardInfos, ChalkableConnector chalkableConnector)
+        private async Task<IList<string>> BuildStandardSearchQuery(IEnumerable<StandardInfo> standardInfos, ChalkableConnector chalkableConnector)
         {
             if (standardInfos != null)
             {
@@ -148,10 +159,10 @@ namespace Youtube.Controllers
                         if (standardsRelation.RelatedDerivatives != null)
                             codes.AddRange(standardsRelation.RelatedDerivatives.Where(x => !string.IsNullOrEmpty(x.Code)).Select(x => x.Code));
                     }
-                    return codes.Take(20).JoinString();
+                    return codes.Take(20).ToList();
                 }
             }
-            return null;
+            return new List<string>();
         }
 
     }
