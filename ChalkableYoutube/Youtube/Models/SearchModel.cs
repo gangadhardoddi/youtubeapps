@@ -5,8 +5,8 @@ namespace Youtube.Models
 {
     public class SearchModel
     {
-        public string Query { get; set; }
-        public IEnumerable<VideoModel> Videos { get; set; }
+        public IList<string> Query { get; set; }
+        public IList<VideoModel> Videos { get; set; }
         public int AnnouncementApplicationId { get; set; }
         public Guid DistrictId { get; set; }
         public string StandardQuery { get; set; }
