@@ -75,6 +75,7 @@ namespace Youtube.Controllers
                 DistrictId = districtId,
                 IsMyAppsView = myAppsView
             };
+            query = "gobstoppervideos " + query;
             var connector = new YoutubeConnector();
             searchModel.Videos = new List<VideoModel>();
 
