@@ -75,11 +75,10 @@ namespace Youtube.Controllers
                 DistrictId = districtId,
                 IsMyAppsView = myAppsView
             };
-            query = "learnzillionvideo " + query;
             var connector = new YoutubeConnector();
             searchModel.Videos = new List<VideoModel>();
 
-            var videosTasks = query.Select(x => Task.Factory.StartNew(() => connector.Search(x).ToList())).ToList();
+            var videosTasks = query.Select(x => Task.Factory.StartNew(() => connector.Search("learnzillionvideo " + x).ToList())).ToList();
             foreach(var videos in videosTasks)
                 searchModel.Videos.AddRange(await videos);
 
