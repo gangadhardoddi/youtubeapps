@@ -33,7 +33,7 @@ namespace Youtube.Controllers
             {
                 case Settings.EDIT_MODE:
                     var queries = (await BuildSearchQuery(standards, announcementApplicationId)).JoinString(",");
-                    actionParams.Add("queries", queries);
+                    actionParams.Add("query", queries);
                     actionParams.Add("myAppsView", false);
                     return RedirectToAction("Edit", actionParams);
                 case Settings.MY_VIEW_MODE:
@@ -62,15 +62,15 @@ namespace Youtube.Controllers
         }
 
 
-        public async Task<ActionResult> Edit(string queries, int? announcementApplicationId, Guid districtId, bool myAppsView = false, int? count = 9)
+        public async Task<ActionResult> Edit(string query, int? announcementApplicationId, Guid districtId, bool myAppsView = false, int? count = 9)
         {
-            var query = string.IsNullOrWhiteSpace(queries) 
+            var q = string.IsNullOrWhiteSpace(query) 
                 ? new List<string> { "" } 
-                : queries.Split(new[] {','}, StringSplitOptions.RemoveEmptyEntries).ToList();
+                : query.Split(new[] {','}, StringSplitOptions.RemoveEmptyEntries).ToList();
 
             var searchModel = new SearchModel
             {
-                Query = query.Select(x => x.Trim()).ToList(),
+                Query = q.Select(x => x.Trim()).ToList(),
                 AnnouncementApplicationId = announcementApplicationId ?? 0,
                 DistrictId = districtId,
                 IsMyAppsView = myAppsView
@@ -78,7 +78,7 @@ namespace Youtube.Controllers
             var connector = new YoutubeConnector();
             searchModel.Videos = new List<VideoModel>();
 
-            var videosTasks = query.Select(x => Task.Factory.StartNew(() => connector.Search(x).ToList())).ToList();
+            var videosTasks = q.Select(x => Task.Factory.StartNew(() => connector.Search(x).ToList())).ToList();
             foreach(var videos in videosTasks)
                 searchModel.Videos.AddRange(await videos);
 
