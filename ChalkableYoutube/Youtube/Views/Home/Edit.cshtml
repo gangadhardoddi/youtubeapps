@@ -11,7 +11,7 @@
     <div>
         @Html.Hidden("count", Model.Videos.Count(), new {id = "videos-count"})
         @Html.Hidden("standardQuery", Model.StandardQuery)
-        @Helpers.SearchQuery("")
+        @Helpers.SearchQuery()
         <div class="video-list-container">
             @if (Model.Videos.Any())
             {
@@ -24,7 +24,7 @@
                         }
                         @Helpers.VideoThumbnail(Html, Model.Videos.ElementAt(i), Model.AnnouncementApplicationId, Model.DistrictId, Model.IsMyAppsView)
 
-                        if (i % 2 == 1 || i == Model.Videos.Count() - 1)
+                        if (i % 2 == 1 || i == Model.Videos.Count - 1)
                         {
                             @: </div>
                         }
