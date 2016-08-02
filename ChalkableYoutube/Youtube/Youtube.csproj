@@ -284,6 +284,8 @@
     <Content Include="Content\youtube.jpg" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
+    <None Include="Properties\PublishProfiles\learningzillion-qa.pubxml" />
+    <None Include="Properties\PublishProfiles\learnzillion-dev.pubxml" />
     <None Include="Properties\PublishProfiles\youtube-dev.pubxml" />
     <None Include="Properties\PublishProfiles\youtube-prod.pubxml" />
     <None Include="Properties\PublishProfiles\youtube-qa.pubxml" />
@@ -360,7 +362,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
+          <UseIIS>False</UseIIS>
           <AutoAssignPort>False</AutoAssignPort>
           <DevelopmentServerPort>81</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
