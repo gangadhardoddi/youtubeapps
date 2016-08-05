@@ -81,7 +81,6 @@ namespace Youtube.Controllers
             var videosTasks = q.Select(x => Task.Factory.StartNew(() => connector.Search(x).ToList())).ToList();
             foreach(var videos in videosTasks)
                 searchModel.Videos.AddRange(await videos);
-
             return View("Edit", searchModel);
         }
 
