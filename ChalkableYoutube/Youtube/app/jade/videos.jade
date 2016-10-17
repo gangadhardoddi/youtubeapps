@@ -1,0 +1,9 @@
+include controls
+
+each item in data.videos
+   .announcement-item.application
+      .wrapper
+         img(src=item.ThumbUrl)
+         .title=item.ShortTitle
+         .shortdesc=item.ShortDescription
+         +ActionLinkButton("Teacher/Attach?contentId=" + item.ContentId + "&announcementApplicationId=" + data.announcementApplicationId, "Open").download-link
