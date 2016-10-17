@@ -1,0 +1,21 @@
+include controls
+
+mixin RenderVideos(data, resources)
+   -buf.push(data.renderVideosTpl(resources))
+
++VideosFilters()
++ActionBar()
+   .pressed Recommended
+   +ActionLinkButton("javascript:", "All").all-action
+.videos-container
+   if data.standardVideos.length > 0
+      each item, index in data.standardVideos
+         +CloseOpen(item.StandardName)
+            if item.Videos.length > 0
+               +PaginatedForm('recommendedForm', 'recommended-videos-form', data)(id=index)
+                  input(type='hidden' name='standardName' value=item.StandardName)
+                  .attachments-and-applications
+                     +RenderVideos(data, item.Videos)
+   else
+      .no-videos
+         .title.no-items-text There are no Recommended Videos for attached standards
