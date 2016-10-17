@@ -1,0 +1,41 @@
+﻿@using Chalkable.API.Helpers
+@model Youtube.Models.SearchModel
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@Helpers.AppLogo(Html, Model.AnnouncementApplicationId, Model.DistrictId)
+@using (Html.BeginForm())
+{    
+    <div>
+        @Html.Hidden("count", Model.Videos.Count(), new {id = "videos-count"})
+        @Html.Hidden("standardQuery", Model.StandardQuery)
+        @Helpers.SearchQuery()
+        <div class="video-list-container">
+            @if (Model.Videos.Any())
+            {
+                <div class="video-list">
+                    @for (var i = 0; i < Model.Videos.Count(); i++)
+                    {
+                        if (i % 2 == 0)
+                        {
+                            @: <div class="row">
+                        }
+                        @Helpers.VideoThumbnail(Html, Model.Videos.ElementAt(i), Model.AnnouncementApplicationId, Model.DistrictId, Model.IsMyAppsView)
+
+                        if (i % 2 == 1 || i == Model.Videos.Count - 1)
+                        {
+                            @: </div>
+                        }
+                    }
+                </div>
+            }
+            else
+            {
+                @:<div style="font: bold 22px/260px Reenie Beanie; text-align: center; height: 260px;"> No videos found</div>
+            }
+            
+        </div>
+    </div>
+}
