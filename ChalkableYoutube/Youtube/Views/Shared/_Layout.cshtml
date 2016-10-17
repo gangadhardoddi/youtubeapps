@@ -2,39 +2,32 @@
 <html lang="en">
 <head>
     <meta http-equiv="Cache-Control" content="no-cache" />
-    <meta http-equiv="Expires" content="Fri, 30 Apr 2010 11:12:01 GMT" />
-    <meta http-equiv="Expires" content="0" />
     <meta charset="utf-8" />
     <title>@ViewBag.Title - Chalkable Youtube</title>
     <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon"/>
+
+    <link href="@ViewBag.ApiRoot/Home/UiLibraryUrl" type="text/css" rel="stylesheet" />
     <link href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,300,600,400,700" rel="stylesheet" type="text/css" />
     <link href="//fonts.googleapis.com/css?family=Reenie+Beanie" rel="stylesheet" type="text/css">
     
     <meta name="viewport" content="width=device-width" />
-    @Styles.Render("~/Content/css")
+    @*@Styles.Render("~/Content/css")*@
 
     <script src="/Scripts/jquery-2.2.3.min.js"></script>
 
     @Scripts.Render(ViewBag.ApiRoot + "/scripts/api/chlk-js-api.js")
         
 
-    @RenderSection("headerscripts", required: false)
-        
-        
-    @if (!ViewData.ContainsKey("ReadyToAttach"))
-    {
-        ViewData["ReadyToAttach"] = false;
-    }
-
-    <script type="text/javascript">
-        var isReady = '@ViewBag.ReadyToAttach' == 'True';
-        CHLK_API.setReady(isReady);
-    </script>
+    @RenderSection("headscripts", false)
+    
+    <script src="@Url.Content("~/Scripts/app.compiled.js")"></script>
 </head>
 <body>        
-    <div class="main">
+    <div class="youtube-main">
         <section class="content-wrapper">
-            @RenderBody()
+            <div class="fluid-container">
+                @RenderBody()
+            </div>
         </section>
     </div>
     @RenderSection("scripts", required: false)

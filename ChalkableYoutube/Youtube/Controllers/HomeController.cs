@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using System.Web.Routing;
 using Chalkable.API;
+using Chalkable.API.Exceptions;
 using Chalkable.API.Helpers;
+using Chalkable.API.Models;
 using DotNetOpenAuth.Messaging;
 using Youtube.Logic;
 using Youtube.Models;
@@ -32,10 +35,11 @@ namespace Youtube.Controllers
             switch (mode)
             {
                 case Settings.EDIT_MODE:
-                    var queries = (await BuildSearchQuery(standards, announcementApplicationId)).JoinString(",");
-                    actionParams.Add("query", queries);
-                    actionParams.Add("myAppsView", false);
-                    return RedirectToAction("Edit", actionParams);
+                    return RedirectToAction("Index", "Youtube", new RouteValueDictionary
+                    {
+                        ["standardIds"] = standards.Select(x => x.StandardId).JoinString(","),
+                        ["announcementApplicationId"] = announcementApplicationId
+                    });
                 case Settings.MY_VIEW_MODE:
                     actionParams.Add("myAppsView", true);
                     return RedirectToAction("Edit", actionParams);
@@ -64,25 +68,16 @@ namespace Youtube.Controllers
 
         public async Task<ActionResult> Edit(string query, int? announcementApplicationId, Guid districtId, bool myAppsView = false, int? count = 9)
         {
-            var q = string.IsNullOrWhiteSpace(query) 
-                ? new List<string> { "" } 
-                : query.Split(new[] {','}, StringSplitOptions.RemoveEmptyEntries).ToList();
 
-            var searchModel = new SearchModel
-            {
-                Query = q.Select(x => x.Trim()).ToList(),
-                AnnouncementApplicationId = announcementApplicationId ?? 0,
-                DistrictId = districtId,
-                IsMyAppsView = myAppsView
-            };
-            var connector = new YoutubeConnector();
-            searchModel.Videos = new List<VideoModel>();
+            await Task.Delay(0);
 
-            var videosTasks = q.Select(x => Task.Factory.StartNew(() => connector.Search(x).ToList())).ToList();
-            foreach(var videos in videosTasks)
-                searchModel.Videos.AddRange(await videos);
+            //var videosTasks = q.Select(x => Task.Factory.StartNew(() => connector.Search(x).ToList())).ToList();
+            //foreach(var videos in videosTasks)
+            //    searchModel.Videos.AddRange(await videos);
 
-            return View("Edit", searchModel);
+            return Json(true);
+
+            //return View("Edit", searchModel);
         }
 
         public ActionResult ViewVideo(string id)
@@ -164,6 +159,6 @@ namespace Youtube.Controllers
             }
             return new List<string>();
         }
-
     }
+    
 }

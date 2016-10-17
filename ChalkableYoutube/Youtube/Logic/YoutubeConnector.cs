@@ -26,33 +26,20 @@ namespace Youtube.Logic
             }
         }
 
-        public IEnumerable<VideoModel> Search(string videoQuery)
+        public IEnumerable<VideoModel> Search(string videoQuery, int maxResult = 50)
         {
             var youtubeService = GetYoutubeService();
 
             var searchListRequest = youtubeService.Search.List("snippet");
             if(!string.IsNullOrWhiteSpace(videoQuery))
                 searchListRequest.Q = videoQuery;
-            searchListRequest.MaxResults = 50;
+            searchListRequest.MaxResults = maxResult;
+            searchListRequest.Type = "video";
 
             // Call the search.list method to retrieve results matching the specified query term.
-            var searchListResponse = searchListRequest.Execute();
+            var searchListResponse = searchListRequest.Execute();          
 
-            var videoIds = new List<string>();
-
-            // Add each result to the appropriate list, and then display the lists of
-            // matching videos, channels, and playlists.
-            foreach (var searchResult in searchListResponse.Items)
-            {
-                switch (searchResult.Id.Kind)
-                {
-                    case "youtube#video":
-                        videoIds.Add(searchResult.Id.VideoId);
-                        break;
-                }
-            }            
-
-            return GetVideoInfo(youtubeService, videoIds.ToArray());
+            return GetVideoInfo(youtubeService, searchListResponse.Items.Select(x => x.Id.VideoId).ToArray(), maxResult);
         }
 
         private YouTubeService GetYoutubeService()
@@ -64,11 +51,11 @@ namespace Youtube.Logic
             });
         }
 
-        private static IEnumerable<VideoModel> GetVideoInfo(YouTubeService youtubeService, string[] videoIds)
+        private static IEnumerable<VideoModel> GetVideoInfo(YouTubeService youtubeService, string[] videoIds, int maxResult = 50)
         {
             var videoListRequest = youtubeService.Videos.List("snippet,contentDetails,statistics");
             videoListRequest.Id = string.Join(",", videoIds);
-            videoListRequest.MaxResults = 50;
+            videoListRequest.MaxResults = maxResult;
 
             var videoListResponse = videoListRequest.Execute();
 
