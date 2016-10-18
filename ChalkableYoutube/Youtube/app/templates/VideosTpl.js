@@ -5,7 +5,6 @@ export default class VideosTpl extends BaseTpl{
     constructor(data){
         super();
         this.videos = data.videos;
-        this.announcementApplicationId = data.announcementApplicationId;
     }
 
     get jade(){return videosView;}

@@ -21,9 +21,6 @@ export default class BaseVideosView extends BaseView{
                 setTimeout(()=>{
                     var params = this.getSearchQuery();
 
-                    console.log('params when submit was trigged: ');
-                    console.log(params);
-
                     !target.hasClass('submit-process') && target.addClass('submit-process');
                     this.controller.searchAction(params);
                 }, 0);

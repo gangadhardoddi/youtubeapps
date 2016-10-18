@@ -1,7 +1,7 @@
 
 mixin SearchControl(value, name, placeholder)
    .search-control
-      input(type="text", name=name, value=value placeholder=placeholder)
+      input(type="text", name=name, value=value placeholder=placeholder).search-input
       .search-glass
       .close-btn.clear-filter.clear-search.hidden
 
@@ -20,9 +20,7 @@ mixin CloseOpen(title)
 
 mixin VideosFilters()
    .search-filters
-      .search-filter
-         .filter-component
-            +SearchControl("", "searchQuery", " Search Youtube")
+         +SearchControl("", "searchQuery", " Search Youtube")
 
 mixin ActionLinkButton(link, displayName)
    span.chlk-button.action-button
