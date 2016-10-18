@@ -6,13 +6,12 @@ export default class StandardVideosTpl extends BaseTpl{
     constructor(data){
         super();
         this.standardVideos = data.standardVideos;
-        this.announcementApplicationId = data.announcementApplicationId;
     }
 
     get jade(){return standardVideosJade;}
 
     renderVideosTpl(videos){
-        var tpl = new VideosTpl({videos: videos, announcementApplicationId: this.announcementApplicationId});
+        var tpl = new VideosTpl({videos: videos});
         var content = tpl.render();
         return content;
     }

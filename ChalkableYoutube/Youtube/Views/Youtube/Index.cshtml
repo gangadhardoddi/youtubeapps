@@ -1,0 +1,18 @@
+﻿@model Youtube.Models.StartupViewData
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section headscripts
+{
+    <script type="text/javascript">
+        //--- initialze data for filtering
+        var STANDARD_IDS = @Html.Raw(Model.StandardIdsJson);
+        var STANDARD_VIDEOS = @Html.Raw(Model.StandardVideosJson);
+        var ANNOUNCEMENT_APPLICATION_ID = @Html.Raw(Model.AnnouncementApplicationId);
+    </script>
+}
+
+<div class="videos-view">
+</div>

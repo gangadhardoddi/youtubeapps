@@ -45,6 +45,7 @@ export default class BaseView{
         if($('.loading-page').length == 0){
             var loader = '<div class="loading-page"></div>';
             this.dom.append(loader);
+            $('.videos-container').css('opacity', '0.2');
         }
     }
 
@@ -52,6 +53,7 @@ export default class BaseView{
         var loader = this.dom.find('.loading-page');
         if(loader.length > 0){
             loader.remove();
+            $('.videos-container').css('opacity', '1');
         }
     }
 

@@ -26,5 +26,5 @@ ChalkableYoutube/Youtube/*trace.log
 ChalkableYoutube/packages/*
 Chalkable.Apps/packages/*
 ChalkableYoutube/.vs/config/applicationhost.config
-ChalkableYoutube/Youtube/node_modules/*
-ChalkableYoutube/Youtube/.sass-cache/*
+ChalkableYoutube/Youtube/node_modules/**
+ChalkableYoutube/Youtube/.sass-cache/**

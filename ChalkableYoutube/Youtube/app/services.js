@@ -8,7 +8,6 @@ class VideoService {
 
         }).then(data => {return data;}).catch(message=>{
             window['CHLK_API'].showAlertBox('Whoops. Something went wrong, please try again');
-            console.error(message);
             return;
         })
     }
@@ -19,19 +18,11 @@ class VideoService {
         });
     }
 
-    static getRecommended(standardIds){
-        return VideoService.get("/Youtube/RecommendedVideos",{
-            standardIds: standardIds && standardIds.join(',')
-        });
-    }
-
     static processResponse(response){
-        console.log('Process response started');
-        console.log(response);
         if (!response.Success) {
             return response.Message;
         }
-        console.log('Process response finished');
+
         return response.Data;
     }
 }

@@ -19,8 +19,6 @@ export default class RecommendedVideosView extends BaseVideosView{
         this.dom
             .on('click', '.action-bar a', event=>{ this.controller.allVideosAction()})
             .on('input', "[name=searchQuery]", event=> {
-                console.log('input was trigged');
-
                 clearTimeout(keypressTimeOut);
                 keypressTimeOut = setTimeout(()=>{
                     $(this.loadVideosFormSelector_).trigger('submit');

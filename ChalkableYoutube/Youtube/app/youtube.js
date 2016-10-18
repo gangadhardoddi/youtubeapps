@@ -27,33 +27,20 @@ class VideosController{
         this.view.partialRefreshAsync(completer, message);
     }
 
-    startUpAction(){
-        var model = {
-            announcementApplicationId: GlobalVariables.ANNOUNCEMENT_APPLICATION_ID,
-            standardVideos: GlobalVariables.STANDARD_VIDEOS
-        };
-        var res = new Promise((resolve,reject)=> resolve(model));
-        this.pushView_(RecommendedVideosView, res);
-    }
-
     searchAction(searchQuery){
-        var res = Services.VideoService.search(searchQuery).then(videos=>{
+        var res = Services.VideoService.search(searchQuery).then( videos =>{
             return {
-                videos: videos,
-                announcementApplicationId: GlobalVariables.ANNOUNCEMENT_APPLICATION_ID
+                videos: videos
             };
         });
         this.updateView_(res, 'load-videos');
     }
 
     recommendedVideosAction(){
-        var res = Services.VideoService.getRecommended(GlobalVariables.STANDARD_IDS)
-            .then(standardVideos => {
-                return {
-                    standardVideos: GlobalVariables.STANDARD_VIDEOS,
-                    announcementApplicationId: GlobalVariables.ANNOUNCEMENT_APPLICATION_ID
-                };
-            });
+        var model = {
+            standardVideos: GlobalVariables.STANDARD_VIDEOS
+        };
+        var res = new Promise((resolve,reject)=> resolve(model));
         this.pushView_(RecommendedVideosView, res);
     }
 
@@ -61,8 +48,7 @@ class VideosController{
         var res = Services.VideoService.search(null)
             .then(videos=>{
                 return {
-                    videos: videos,
-                    announcementApplicationId: GlobalVariables.ANNOUNCEMENT_APPLICATION_ID
+                    videos: videos
                 };
             });
         this.pushView_(AllVideosView, res);
@@ -72,5 +58,5 @@ class VideosController{
 $(() => {
     YoutubeControls.Create();
 
-    new VideosController().startUpAction();
+    new VideosController().recommendedVideosAction();
 });

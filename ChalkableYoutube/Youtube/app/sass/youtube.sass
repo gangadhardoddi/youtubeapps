@@ -3,7 +3,7 @@ html
 
 body
   background-color: #FCFCFC
-  height: calc(100% - 38px)
+  height: calc(100% - 35px)
   overflow: hidden
   font-family: 'Open Sans', sans-serif
 
@@ -42,9 +42,6 @@ body
     text-align: center
     font-size: 50pt
 
-  .search-glass
-    margin-left: 5px !important
-
   .close-open-control
     text-align: left !important
     margin-right: 20px !important
@@ -52,18 +49,23 @@ body
   .action-bar
     margin-top: 30px
 
-  .search-filter
+  .search-control
+    position: relative
     display: inline-block
     float: right
-    padding: 5px 0px 5px 10px
-    z-index: 100
-    top: -18px
-    position: relative
+    width: 22%
+
+    .search-input
+      width: 92%
+      display: inline-block
 
     .title
       display: block
     .filter-component
       display: block
+
+  .action-bar
+    clear: both
 
   .videos-container
     background: #fff
@@ -77,7 +79,7 @@ body
     min-height: 360px
     overflow-y: scroll
     overflow-x: hidden
-    max-height: calc(100% - 75px)
+    max-height: calc(100% - 119px)
 
     .announcement-item.application
       padding: 3px
@@ -91,6 +93,7 @@ body
     .shortdesc
       text-align: left
       white-space: pre-wrap
+      top: 32px
 
     .duration
       position: absolute
@@ -117,7 +120,8 @@ body
 
   .clear-filter
     transform: scale(0.7)
-    top: 13%
+    top: 3%
+    right: 6%
     width: 32px
     height: 32px
     position: absolute

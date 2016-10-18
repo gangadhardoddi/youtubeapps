@@ -9,7 +9,6 @@ export default class AllVideosTpl extends BaseTpl{
     constructor(data){
         super();
         this.videos = data.videos;
-        this.announcementApplicationId = data.announcementApplicationId;
     }
 
     get jade(){return allVideosJade; }
@@ -20,7 +19,7 @@ export default class AllVideosTpl extends BaseTpl{
     }
 
     renderVideosTpl(videos){
-        var tpl = new VideosTpl({videos: videos, announcementApplicationId: this.announcementApplicationId});
+        var tpl = new VideosTpl({videos: videos});
         var content = tpl.render();
         return content;
     }

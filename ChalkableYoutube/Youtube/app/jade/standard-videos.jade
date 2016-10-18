@@ -3,7 +3,6 @@ include controls
 mixin RenderVideos(data, resources)
    -buf.push(data.renderVideosTpl(resources))
 
-+VideosFilters()
 +ActionBar()
    .pressed Recommended
    +ActionLinkButton("javascript:", "All").all-action
@@ -13,7 +12,6 @@ mixin RenderVideos(data, resources)
          +CloseOpen(item.StandardName)
             if item.Videos.length > 0
                +PaginatedForm('recommendedForm', 'recommended-videos-form', data)(id=index)
-                  input(type='hidden' name='standardName' value=item.StandardName)
                   .attachments-and-applications
                      +RenderVideos(data, item.Videos)
    else
