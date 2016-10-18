@@ -1,5 +1,39 @@
+html
+  height: 100%
+
 body
   background-color: #FCFCFC
+  height: calc(100% - 38px)
+  overflow: hidden
+  font-family: 'Open Sans', sans-serif
+
+  .youtube-main
+    height: 100%
+
+    .youtube-header
+      text-align: center
+      font-size: 23px
+      margin-top: 27px
+      margin-bottom: -17px
+      font-weight: 600
+
+  .content-wrapper
+    height: 100%
+
+  .fluid-container
+    height: 100%
+
+  .videos-view
+    height: 100%
+
+  .all-videos-page
+    height: 100%
+
+  .search-videos-form
+    height: 100%
+
+  .standard-videos-page
+    height: 100%
 
   .hidden
     display: none
@@ -41,10 +75,34 @@ body
     padding-left: 25px
     min-width: 98%
     min-height: 360px
+    overflow-y: scroll
+    overflow-x: hidden
+    max-height: calc(100% - 75px)
+
+    .announcement-item.application
+      padding: 3px
+
+      img
+        border-radius: 2px
+
+    .announcement-item.application:hover .duration
+      opacity: 0.1
 
     .shortdesc
       text-align: left
       white-space: pre-wrap
+
+    .duration
+      position: absolute
+      bottom: 42px
+      right: 2px
+      z-index: 1
+      background-color: black
+      color: white
+      padding: 0px 2px
+      opacity: 0.8
+      border-radius: 2px
+      font-size: 13px
 
   .load-videos
     display: table

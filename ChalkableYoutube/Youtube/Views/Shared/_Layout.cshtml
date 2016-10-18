@@ -22,14 +22,14 @@
     
     <script src="@Url.Content("~/Scripts/app.compiled.js")"></script>
 </head>
-<body>        
+<body>
     <div class="youtube-main">
+        <div class="youtube-header">YouTube Recommended Content</div>
         <section class="content-wrapper">
             <div class="fluid-container">
                 @RenderBody()
             </div>
         </section>
     </div>
-    @RenderSection("scripts", required: false)
 </body>
 </html>

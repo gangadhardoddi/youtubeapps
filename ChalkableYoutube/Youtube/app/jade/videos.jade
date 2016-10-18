@@ -4,6 +4,7 @@ each item in data.videos
    .announcement-item.application
       .wrapper
          img(src=item.ThumbUrl)
+         .duration=item.Duration
          .title=item.ShortTitle
          .shortdesc=item.ShortDescription
          +ActionLinkButton("Teacher/Attach?contentId=" + item.ContentId + "&announcementApplicationId=" + data.announcementApplicationId, "Open").download-link
