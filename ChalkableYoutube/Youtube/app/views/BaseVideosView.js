@@ -9,10 +9,8 @@ export default class BaseVideosView extends BaseView{
     get loadVideosFormSelector_(){}
     get updateVideosSelector_(){}
 
-    getParametersForSubmit(currentForm){
-        return {
-            searchQuery: $('.search-filters').find('[name="searchQuery"]').val()
-        }
+    getSearchQuery(){
+        return $('.search-filters').find('[name="searchQuery"]').val();
     }
 
     bindEvents_(){
@@ -21,13 +19,13 @@ export default class BaseVideosView extends BaseView{
             .on('submit', this.loadVideosFormSelector_, event=>{
                 var target = $(event.target);
                 setTimeout(()=>{
-                    var params = this.getParametersForSubmit(target);
+                    var params = this.getSearchQuery();
 
                     console.log('params when submit was trigged: ');
                     console.log(params);
 
                     !target.hasClass('submit-process') && target.addClass('submit-process');
-                    this.controller.searchVideosAction(params);
+                    this.controller.searchAction(params);
                 }, 0);
                 return false;
             })

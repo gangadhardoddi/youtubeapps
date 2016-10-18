@@ -2,21 +2,15 @@ class VideoService {
 
     static get(url, params){
         return new Promise(function(resolve, reject){
-                $.getJSON(url, params)
-                    .done(response=>{
+            $.getJSON(url, params).done(response => {
                     resolve(VideoService.processResponse(response));
-            })
-                .fail(error=>{
-                    reject(error);
-            });
+            }).fail(error => { reject(error); });
 
-            })
-                .then(data=>{return data;})
-    .catch(message=>{
+        }).then(data => {return data;}).catch(message=>{
             window['CHLK_API'].showAlertBox('Whoops. Something went wrong, please try again');
-        console.error(message);
-        return;
-    })
+            console.error(message);
+            return;
+        })
     }
 
     static search(searchQuery){
