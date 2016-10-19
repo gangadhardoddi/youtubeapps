@@ -75,7 +75,8 @@ namespace Youtube.Logic
                             Description = videoResult.Snippet.Description,
                             Views = videoResult.Statistics.ViewCount ?? 0,
                             UploadedBy = videoResult.Snippet.ChannelTitle,
-                            Duration = XmlConvert.ToTimeSpan(videoResult.ContentDetails.Duration).ToString()
+                            Duration = XmlConvert.ToTimeSpan(videoResult.ContentDetails.Duration).ToString(),
+                            Author = videoResult.Snippet.ChannelTitle
                         });
                         break;
                 }

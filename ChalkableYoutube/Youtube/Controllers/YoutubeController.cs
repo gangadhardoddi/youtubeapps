@@ -5,13 +5,13 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using Chalkable.API;
 using Newtonsoft.Json;
+using Youtube.Logic;
 using Youtube.Models;
 
 namespace Youtube.Controllers
 {
     public class YoutubeController : BaseController
     {
-
         public async Task<ActionResult> Index(string standardIds, int announcementApplicationId)
         {
             var standardVideos = await GetRecommended(standardIds);
@@ -32,18 +32,24 @@ namespace Youtube.Controllers
             return ChlkJson(videos);
         }
 
-        public async Task<ActionResult> RecommendedVideos(string standardIds)
-        {
-            var videos = await GetRecommended(standardIds);
-
-            return ChlkJson(videos);
-        }
-
         public ActionResult Video(string id)
         {
             var video = YoutubeConnector.GetById(id);
 
             return ChlkJson(video);
+        }
+
+        public async Task<ActionResult> Attach(string id, int announcementApplicationId)
+        {
+            var video = YoutubeConnector.GetById(id);
+
+            await ChalkableConnector.Announcement.UpdateAnnouncementApplicationMeta(announcementApplicationId,
+                    video.ShortTitle, video.Url, video.ShortDescription);
+
+            var storage = new Storage(ChalkableAuthorization.Configuration.ConnectionString);
+            storage.Set(CurrentUser.DistrictId, announcementApplicationId, video.Id);
+
+            return ChlkJson(true);
         }
 
         private async Task<StandardVideos> GetVideosForStandardAsync(string code)

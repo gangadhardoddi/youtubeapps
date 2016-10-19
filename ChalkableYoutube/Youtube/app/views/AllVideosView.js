@@ -25,26 +25,3 @@ export default class AllVideosView extends BaseVideosView{
             });
     }
 }
-
-export default class VideoView extends BaseView{
-    constructor(videosController){
-        super(videosController);
-    }
-
-    get cssClass_(){return 'video-view-page'; }
-    get templateClass_(){ return VideoViewTpl; }
-
-    bindEvents_(){
-        super.bindEvents_();
-        var keypressTimeOut;
-        this.dom
-            .on("click", ".action-bar a", event=>{this.controller.recommendedVideosAction()})
-            .on('input', "[name=searchQuery]", event=> {
-                clearTimeout(keypressTimeOut);
-                keypressTimeOut = setTimeout(() => {
-                    var formSelector = $(event.target).parents(this.loadVideosFormSelector_);
-                    formSelector.trigger('submit');
-                }, 700);
-            });
-    }
-}

@@ -3,6 +3,7 @@ import styles from "./sass/youtube.sass";
 import Services from './services.js';
 import RecommendedVideosView from './views/RecommendedVideosView.js';
 import AllVideosView from './views/AllVideosView.js';
+import VideoView from './views/VideoView.js'
 
 import YoutubeControls from './controls.js'
 
@@ -23,11 +24,23 @@ class VideosController{
         this.view.refreshAsync(completer);
     }
 
+    isAppReady(){
+        if(typeof this.view == 'VideoView') {
+
+
+            return true;
+        }
+
+        return false;
+    }
+
     updateView_(completer, message){
         this.view.partialRefreshAsync(completer, message);
     }
 
     searchAction(searchQuery){
+        GlobalVariables.CHLK_API.onBeforeClose(this.isAppReady);
+
         var res = Services.VideoService.search(searchQuery).then( videos =>{
             return {
                 videos: videos
@@ -52,6 +65,12 @@ class VideosController{
                 };
             });
         this.pushView_(AllVideosView, res);
+    }
+
+    viewVideoAction(id){
+        var res = Services.VideoService.getVideoById(id);
+
+        this.pushView_(VideoView, res);
     }
 }
 

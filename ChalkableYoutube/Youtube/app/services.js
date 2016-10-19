@@ -18,6 +18,10 @@ class VideoService {
         });
     }
 
+    static getVideoById(id) {
+        return VideoService.get("/Youtube/Video", { id: id });
+    }
+
     static processResponse(response){
         if (!response.Success) {
             return response.Message;

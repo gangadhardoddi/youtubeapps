@@ -14,7 +14,6 @@ body
       text-align: center
       font-size: 23px
       margin-top: 27px
-      margin-bottom: -17px
       font-weight: 600
 
   .content-wrapper
@@ -125,3 +124,60 @@ body
     width: 32px
     height: 32px
     position: absolute
+
+  .video-view-page
+    margin: 10px
+    text-align: center
+    overflow-y: scroll
+    overflow-x: hidden
+    height: 95%
+
+    .video-content
+      display: inline-block
+      margin: auto
+
+      .video-title
+        text-align: center
+        font-weight: 600
+
+      .video-iframe
+        width: 761px
+        height: 434px
+        border: 5px solid #8a8a8a
+        border-radius: 4px
+        box-shadow: rgb(150, 150, 150) 5px 5px 10px
+        display: block
+        margin: auto
+
+      .video-info
+        margin-top: 21px
+        text-align: left
+        display: inline-block
+        font-size: 15px
+
+        .video-author
+          display: inline-block
+          float: left
+
+        .video-views-count
+          display: inline-block
+          float: right
+
+        .video-description
+          clear: both
+
+          span:first-child
+            font-weight: bolder
+
+          span:nth-child(2)
+            white-space: pre-wrap
+            display: block
+            text-align: left
+            width: 704px
+
+    .cancel-button
+      float: right
+      margin-bottom: 20px
+      margin-right: 20px
+      width: 113px
+      height: 33px
