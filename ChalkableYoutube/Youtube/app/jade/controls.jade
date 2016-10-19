@@ -1,4 +1,7 @@
 
+mixin Hidden(name, value)
+   input(type="hidden", name=name, value=value)
+
 mixin SearchControl(value, name, placeholder)
    .search-control
       input(type="text", name=name, value=value placeholder=placeholder).search-input

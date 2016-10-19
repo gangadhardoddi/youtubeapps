@@ -48,6 +48,8 @@ namespace Youtube.Models
         public string ThumbUrl => "https://i4.ytimg.com/vi/" + Id + "/mqdefault.jpg";
         public string Url => "https://www.youtube.com/embed/" + Id;
 
+        public string Author { get; set; }
+
         private string _desc;
     }
 }

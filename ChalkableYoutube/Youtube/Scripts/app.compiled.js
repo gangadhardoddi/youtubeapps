@@ -64,7 +64,11 @@
 
 	var _AllVideosView2 = _interopRequireDefault(_AllVideosView);
 
-	var _controls = __webpack_require__(20);
+	var _VideoView = __webpack_require__(20);
+
+	var _VideoView2 = _interopRequireDefault(_VideoView);
+
+	var _controls = __webpack_require__(23);
 
 	var _controls2 = _interopRequireDefault(_controls);
 
@@ -129,6 +133,13 @@
 	            });
 	            this.pushView_(_AllVideosView2.default, res);
 	        }
+	    }, {
+	        key: 'viewVideoAction',
+	        value: function viewVideoAction(id) {
+	            var res = _services2.default.VideoService.getVideoById(id);
+
+	            this.pushView_(_VideoView2.default, res);
+	        }
 	    }]);
 
 	    return VideosController;
@@ -176,7 +187,7 @@
 
 
 	// module
-	exports.push([module.id, "html {\n  height: 100%; }\n\nbody {\n  background-color: #FCFCFC;\n  height: calc(100% - 35px);\n  overflow: hidden;\n  font-family: 'Open Sans', sans-serif; }\n  body .youtube-main {\n    height: 100%; }\n    body .youtube-main .youtube-header {\n      text-align: center;\n      font-size: 23px;\n      margin-top: 27px;\n      margin-bottom: -17px;\n      font-weight: 600; }\n  body .content-wrapper {\n    height: 100%; }\n  body .fluid-container {\n    height: 100%; }\n  body .videos-view {\n    height: 100%; }\n  body .all-videos-page {\n    height: 100%; }\n  body .search-videos-form {\n    height: 100%; }\n  body .standard-videos-page {\n    height: 100%; }\n  body .hidden {\n    display: none; }\n  body h1 {\n    text-align: center;\n    font-size: 50pt; }\n  body .close-open-control {\n    text-align: left !important;\n    margin-right: 20px !important; }\n  body .action-bar {\n    margin-top: 30px; }\n  body .search-control {\n    position: relative;\n    display: inline-block;\n    float: right;\n    width: 22%; }\n    body .search-control .search-input {\n      width: 92%;\n      display: inline-block; }\n    body .search-control .title {\n      display: block; }\n    body .search-control .filter-component {\n      display: block; }\n  body .action-bar {\n    clear: both; }\n  body .videos-container {\n    background: #fff;\n    border: 1px solid #c8c7c3;\n    display: inline-block;\n    overflow: auto;\n    text-align: center;\n    padding-top: 30px;\n    padding-left: 25px;\n    min-width: 98%;\n    min-height: 360px;\n    overflow-y: scroll;\n    overflow-x: hidden;\n    max-height: calc(100% - 119px); }\n    body .videos-container .announcement-item.application {\n      padding: 3px; }\n      body .videos-container .announcement-item.application img {\n        border-radius: 2px; }\n    body .videos-container .announcement-item.application:hover .duration {\n      opacity: 0.1; }\n    body .videos-container .shortdesc {\n      text-align: left;\n      white-space: pre-wrap;\n      top: 32px; }\n    body .videos-container .duration {\n      position: absolute;\n      bottom: 42px;\n      right: 2px;\n      z-index: 1;\n      background-color: black;\n      color: white;\n      padding: 0px 2px;\n      opacity: 0.8;\n      border-radius: 2px;\n      font-size: 13px; }\n  body .load-videos {\n    display: table;\n    width: 300pt;\n    height: 50pt;\n    text-align: center;\n    font-size: 20pt;\n    margin: auto;\n    display: block;\n    border: none;\n    background-color: aquamarine; }\n  body .clear-filter {\n    transform: scale(0.7);\n    top: 3%;\n    right: 6%;\n    width: 32px;\n    height: 32px;\n    position: absolute; }\n", ""]);
+	exports.push([module.id, "html {\n  height: 100%; }\n\nbody {\n  background-color: #FCFCFC;\n  height: calc(100% - 35px);\n  overflow: hidden;\n  font-family: 'Open Sans', sans-serif; }\n  body .youtube-main {\n    height: 100%; }\n    body .youtube-main .youtube-header {\n      text-align: center;\n      font-size: 23px;\n      margin-top: 27px;\n      font-weight: 600; }\n  body .content-wrapper {\n    height: 100%; }\n  body .fluid-container {\n    height: 100%; }\n  body .videos-view {\n    height: 100%; }\n  body .all-videos-page {\n    height: 100%; }\n  body .search-videos-form {\n    height: 100%; }\n  body .standard-videos-page {\n    height: 100%; }\n  body .hidden {\n    display: none; }\n  body h1 {\n    text-align: center;\n    font-size: 50pt; }\n  body .close-open-control {\n    text-align: left !important;\n    margin-right: 20px !important; }\n  body .action-bar {\n    margin-top: 30px; }\n  body .search-control {\n    position: relative;\n    display: inline-block;\n    float: right;\n    width: 22%; }\n    body .search-control .search-input {\n      width: 92%;\n      display: inline-block; }\n    body .search-control .title {\n      display: block; }\n    body .search-control .filter-component {\n      display: block; }\n  body .action-bar {\n    clear: both; }\n  body .videos-container {\n    background: #fff;\n    border: 1px solid #c8c7c3;\n    display: inline-block;\n    overflow: auto;\n    text-align: center;\n    padding-top: 30px;\n    padding-left: 25px;\n    min-width: 98%;\n    min-height: 360px;\n    overflow-y: scroll;\n    overflow-x: hidden;\n    max-height: calc(100% - 119px); }\n    body .videos-container .announcement-item.application {\n      padding: 3px; }\n      body .videos-container .announcement-item.application img {\n        border-radius: 2px; }\n    body .videos-container .announcement-item.application:hover .duration {\n      opacity: 0.1; }\n    body .videos-container .shortdesc {\n      text-align: left;\n      white-space: pre-wrap;\n      top: 32px; }\n    body .videos-container .duration {\n      position: absolute;\n      bottom: 42px;\n      right: 2px;\n      z-index: 1;\n      background-color: black;\n      color: white;\n      padding: 0px 2px;\n      opacity: 0.8;\n      border-radius: 2px;\n      font-size: 13px; }\n  body .load-videos {\n    display: table;\n    width: 300pt;\n    height: 50pt;\n    text-align: center;\n    font-size: 20pt;\n    margin: auto;\n    display: block;\n    border: none;\n    background-color: aquamarine; }\n  body .clear-filter {\n    transform: scale(0.7);\n    top: 3%;\n    right: 6%;\n    width: 32px;\n    height: 32px;\n    position: absolute; }\n  body .video-view-page {\n    margin: 10px;\n    text-align: center;\n    overflow-y: scroll;\n    overflow-x: hidden;\n    height: 95%; }\n    body .video-view-page .video-content {\n      display: inline-block;\n      margin: auto; }\n      body .video-view-page .video-content .video-title {\n        text-align: center;\n        font-weight: 600; }\n      body .video-view-page .video-content .video-iframe {\n        width: 761px;\n        height: 434px;\n        border: 5px solid #8a8a8a;\n        border-radius: 4px;\n        box-shadow: #969696 5px 5px 10px;\n        display: block;\n        margin: auto; }\n      body .video-view-page .video-content .video-info {\n        margin-top: 21px;\n        text-align: left;\n        display: inline-block;\n        font-size: 15px; }\n        body .video-view-page .video-content .video-info .video-author {\n          display: inline-block;\n          float: left; }\n        body .video-view-page .video-content .video-info .video-views-count {\n          display: inline-block;\n          float: right; }\n        body .video-view-page .video-content .video-info .video-description {\n          clear: both; }\n          body .video-view-page .video-content .video-info .video-description span:first-child {\n            font-weight: bolder; }\n          body .video-view-page .video-content .video-info .video-description span:nth-child(2) {\n            white-space: pre-wrap;\n            display: block;\n            text-align: left;\n            width: 704px; }\n    body .video-view-page .cancel-button {\n      float: right;\n      margin-bottom: 20px;\n      margin-right: 20px;\n      width: 113px;\n      height: 33px; }\n", ""]);
 
 	// exports
 
@@ -532,6 +543,11 @@
 	            });
 	        }
 	    }, {
+	        key: 'getVideoById',
+	        value: function getVideoById(id) {
+	            return VideoService.get("/Youtube/Video", { id: id });
+	        }
+	    }, {
 	        key: 'processResponse',
 	        value: function processResponse(response) {
 	            if (!response.Success) {
@@ -689,7 +705,19 @@
 	                    _this2.controller.searchAction(params);
 	                }, 0);
 	                return false;
+	            }).on('click', '.download-link', function (event) {
+	                var id = _this2.getVideoId(event.target);
+
+	                _this2.controller.viewVideoAction(id);
+
+	                return false;
 	            });
+	        }
+	    }, {
+	        key: 'getVideoId',
+	        value: function getVideoId(node) {
+	            var parent = $(node).parents('div.announcement-item.application');
+	            return parent.find('[name="id"]').val();
 	        }
 	    }, {
 	        key: 'onRefresh_',
@@ -895,6 +923,11 @@
 	  var jade_mixins = {};
 	  var _jade_interp;
 	  ;var locals_for_with = locals || {};(function (data, undefined) {
+	    jade_mixins["Hidden"] = _jade_interp = function jade_interp(name, value) {
+	      var block = this && this.block,
+	          attributes = this && this.attributes || {};
+	      buf.push("<input type=\"hidden\"" + jade.attr("name", name, true, true) + jade.attr("value", value, true, true) + ">");
+	    };
 	    jade_mixins["SearchControl"] = _jade_interp = function jade_interp(value, name, placeholder) {
 	      var block = this && this.block,
 	          attributes = this && this.attributes || {};
@@ -915,10 +948,12 @@
 	        for (var $index = 0, $$l = $$obj.length; $index < $$l; $index++) {
 	          var item = $$obj[$index];
 
-	          buf.push("<div class=\"announcement-item application\"><div class=\"wrapper\"><img" + jade.attr("src", item.ThumbUrl, true, true) + "><div class=\"duration\">" + jade.escape(null == (_jade_interp = item.Duration) ? "" : _jade_interp) + "</div><div class=\"title\">" + jade.escape(null == (_jade_interp = item.ShortTitle) ? "" : _jade_interp) + "</div><div class=\"shortdesc\">" + jade.escape(null == (_jade_interp = item.ShortDescription) ? "" : _jade_interp) + "</div>");
+	          buf.push("<div class=\"announcement-item application\"><div class=\"wrapper\">");
+	          jade_mixins["Hidden"]('id', item.Id);
+	          buf.push("<img" + jade.attr("src", item.ThumbUrl, true, true) + "><div class=\"duration\">" + jade.escape(null == (_jade_interp = item.Duration) ? "" : _jade_interp) + "</div><div class=\"title\">" + jade.escape(null == (_jade_interp = item.ShortTitle) ? "" : _jade_interp) + "</div><div class=\"shortdesc\">" + jade.escape(null == (_jade_interp = item.ShortDescription) ? "" : _jade_interp) + "</div>");
 	          jade_mixins["ActionLinkButton"].call({
 	            attributes: { "class": "download-link" }
-	          }, "Teacher/Attach?contentId=" + item.ContentId + "&announcementApplicationId=" + data.announcementApplicationId, "Open");
+	          }, "javascript:", "Open");
 	          buf.push("</div></div>");
 	        }
 	      } else {
@@ -926,10 +961,12 @@
 	        for (var $index in $$obj) {
 	          $$l++;var item = $$obj[$index];
 
-	          buf.push("<div class=\"announcement-item application\"><div class=\"wrapper\"><img" + jade.attr("src", item.ThumbUrl, true, true) + "><div class=\"duration\">" + jade.escape(null == (_jade_interp = item.Duration) ? "" : _jade_interp) + "</div><div class=\"title\">" + jade.escape(null == (_jade_interp = item.ShortTitle) ? "" : _jade_interp) + "</div><div class=\"shortdesc\">" + jade.escape(null == (_jade_interp = item.ShortDescription) ? "" : _jade_interp) + "</div>");
+	          buf.push("<div class=\"announcement-item application\"><div class=\"wrapper\">");
+	          jade_mixins["Hidden"]('id', item.Id);
+	          buf.push("<img" + jade.attr("src", item.ThumbUrl, true, true) + "><div class=\"duration\">" + jade.escape(null == (_jade_interp = item.Duration) ? "" : _jade_interp) + "</div><div class=\"title\">" + jade.escape(null == (_jade_interp = item.ShortTitle) ? "" : _jade_interp) + "</div><div class=\"shortdesc\">" + jade.escape(null == (_jade_interp = item.ShortDescription) ? "" : _jade_interp) + "</div>");
 	          jade_mixins["ActionLinkButton"].call({
 	            attributes: { "class": "download-link" }
-	          }, "Teacher/Attach?contentId=" + item.ContentId + "&announcementApplicationId=" + data.announcementApplicationId, "Open");
+	          }, "javascript:", "Open");
 	          buf.push("</div></div>");
 	        }
 	      }
@@ -1326,6 +1363,7 @@
 	  var jade_mixins = {};
 	  var _jade_interp3;
 	  ;var locals_for_with = locals || {};(function (data, undefined) {
+
 	    jade_mixins["SearchControl"] = _jade_interp3 = function jade_interp(value, name, placeholder) {
 	      var block = this && this.block,
 	          attributes = this && this.attributes || {};
@@ -1593,6 +1631,7 @@
 	  var jade_mixins = {};
 	  var _jade_interp2;
 	  ;var locals_for_with = locals || {};(function (data) {
+
 	    jade_mixins["SearchControl"] = _jade_interp2 = function jade_interp(value, name, placeholder) {
 	      var block = this && this.block,
 	          attributes = this && this.attributes || {};
@@ -1653,6 +1692,156 @@
 
 /***/ },
 /* 20 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
+
+	var _BaseView2 = __webpack_require__(9);
+
+	var _BaseView3 = _interopRequireDefault(_BaseView2);
+
+	var _VideoViewTpl = __webpack_require__(21);
+
+	var _VideoViewTpl2 = _interopRequireDefault(_VideoViewTpl);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var VideoView = function (_BaseView) {
+	    _inherits(VideoView, _BaseView);
+
+	    function VideoView(videosController) {
+	        _classCallCheck(this, VideoView);
+
+	        return _possibleConstructorReturn(this, (VideoView.__proto__ || Object.getPrototypeOf(VideoView)).call(this, videosController));
+	    }
+
+	    _createClass(VideoView, [{
+	        key: 'bindEvents_',
+	        value: function bindEvents_() {
+	            var _this2 = this;
+
+	            _get(VideoView.prototype.__proto__ || Object.getPrototypeOf(VideoView.prototype), 'bindEvents_', this).call(this);
+	            var keypressTimeOut;
+	            this.dom.on('click', '.cancel-button', function (event) {
+	                _this2.controller.recommendedVideosAction();
+	            });
+	            //    .on("click", ".action-bar a", event=>{this.controller.recommendedVideosAction()})
+	            //    .on('input', "[name=searchQuery]", event=> {
+	            //         clearTimeout(keypressTimeOut);
+	            //         keypressTimeOut = setTimeout(() => {
+	            //           var formSelector = $(event.target).parents(this.loadVideosFormSelector_);
+	            //           formSelector.trigger('submit');
+	            //        }, 700);
+	            //    });
+	        }
+	    }, {
+	        key: 'cssClass_',
+	        get: function get() {
+	            return 'video-view-page';
+	        }
+	    }, {
+	        key: 'templateClass_',
+	        get: function get() {
+	            return _VideoViewTpl2.default;
+	        }
+	    }]);
+
+	    return VideoView;
+	}(_BaseView3.default);
+
+	exports.default = VideoView;
+
+/***/ },
+/* 21 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _videoView = __webpack_require__(22);
+
+	var _videoView2 = _interopRequireDefault(_videoView);
+
+	var _BaseTpl2 = __webpack_require__(14);
+
+	var _BaseTpl3 = _interopRequireDefault(_BaseTpl2);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var VideoViewTpl = function (_BaseTpl) {
+	    _inherits(VideoViewTpl, _BaseTpl);
+
+	    function VideoViewTpl(data) {
+	        _classCallCheck(this, VideoViewTpl);
+
+	        var _this = _possibleConstructorReturn(this, (VideoViewTpl.__proto__ || Object.getPrototypeOf(VideoViewTpl)).call(this));
+
+	        _this.video = data;
+	        return _this;
+	    }
+
+	    _createClass(VideoViewTpl, [{
+	        key: "jade",
+	        get: function get() {
+	            return _videoView2.default;
+	        }
+	    }], [{
+	        key: "renderTo",
+	        value: function renderTo(data, dom, append) {
+	            new VideoViewTpl(data).renderTo(dom, append);
+	        }
+	    }]);
+
+	    return VideoViewTpl;
+	}(_BaseTpl3.default);
+
+	exports.default = VideoViewTpl;
+
+/***/ },
+/* 22 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	var jade = __webpack_require__(12);
+
+	module.exports = function template(locals) {
+	  var buf = [];
+	  var jade_mixins = {};
+	  var jade_interp;
+	  ;var locals_for_with = locals || {};(function (data) {
+	    var video = data.video;
+	    buf.push("<div class=\"video-content\"><h2 class=\"video-title\">" + jade.escape(null == (jade_interp = video.Title) ? "" : jade_interp) + "</h2><iframe" + jade.attr("src", video.Url, true, true) + " allowfullscreen class=\"video-iframe\"></iframe><div class=\"video-info\"><div class=\"video-author\"><b>" + jade.escape(null == (jade_interp = "Contributed by") ? "" : jade_interp) + "</b></div>" + jade.escape(null == (jade_interp = "_" + video.Author) ? "" : jade_interp) + "<div class=\"video-views-count\"><b>" + jade.escape(null == (jade_interp = video.Views + " views") ? "" : jade_interp) + "</b></div><div class=\"video-description\"><span>" + jade.escape(null == (jade_interp = 'Description:') ? "" : jade_interp) + "</span><span>" + jade.escape(null == (jade_interp = video.Description) ? "" : jade_interp) + "</span></div></div></div><div class=\"video-view-footer\"><button name=\"Cancel\" class=\"cancel-button\">" + jade.escape(null == (jade_interp = "Cancel") ? "" : jade_interp) + "</button></div>");
+	  }).call(this, "data" in locals_for_with ? locals_for_with.data : typeof data !== "undefined" ? data : undefined);;return buf.join("");
+	};
+
+/***/ },
+/* 23 */
 /***/ function(module, exports) {
 
 	'use strict';

@@ -26,6 +26,18 @@ export default class BaseVideosView extends BaseView{
                 }, 0);
                 return false;
             })
+            .on('click', '.download-link', event => {
+                var id = this.getVideoId(event.target);
+
+                this.controller.viewVideoAction(id);
+
+                return false;
+            });
+    }
+
+    getVideoId(node) {
+        var parent = $(node).parents('div.announcement-item.application');
+        return parent.find('[name="id"]').val();
     }
 
     onRefresh_(model){
