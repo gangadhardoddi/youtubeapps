@@ -12,6 +12,13 @@ class VideoService {
         })
     }
 
+    static attach(videoId, announcementApplicationId){
+        return VideoService.get("/Youtube/Attach", {
+            id: videoId,
+            announcementApplicationId: announcementApplicationId
+        })
+    }
+
     static search(searchQuery){
         return VideoService.get("/Youtube/SearchVideos", {
             searchQuery: searchQuery

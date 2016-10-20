@@ -12,4 +12,5 @@
             span='Description:'
             span=video.Description
 .video-view-footer
-    button(name="Cancel").cancel-button="Cancel"
+    if data.isTeacherOrAdmin() && !data.isViewMode()
+        button(name="Cancel").cancel-button="Cancel"

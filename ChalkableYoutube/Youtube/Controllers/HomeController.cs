@@ -29,7 +29,6 @@ namespace Youtube.Controllers
             var actionParams = new RouteValueDictionary
                 {
                     {"announcementApplicationId", announcementApplicationId},
-                    {"districtId",CurrentUser.DistrictId},
                 };
 
             switch (mode)
@@ -40,13 +39,24 @@ namespace Youtube.Controllers
                         ["standardIds"] = standards.Select(x => x.StandardId).JoinString(","),
                         ["announcementApplicationId"] = announcementApplicationId
                     });
+
                 case Settings.MY_VIEW_MODE:
-                    actionParams.Add("myAppsView", true);
-                    return RedirectToAction("Edit", actionParams);
+                    return View("Index", new StartupViewData
+                    {
+                        AnnouncementApplicationId = announcementApplicationId,
+                        Mode = Settings.MY_VIEW_MODE,
+                        VideoId = null,
+                        StandardVideosJson = "[]",
+                        Role = CurrentUser.Role.LoweredName
+                    });
+
                 case Settings.VIEW_MODE:
-                    return RedirectToAction("Video", actionParams);
+                    actionParams.Add("id", contentId);
+                    return RedirectToAction("View", "Youtube", actionParams);
+
                 case Settings.GRADING_VIEW_MODE:
-                    return RedirectToAction("Video", actionParams);
+                    actionParams.Add("id", (string)null);
+                    return RedirectToAction("View", "Youtube", actionParams);
             }
             return View("NotSupported");
         }

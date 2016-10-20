@@ -4,15 +4,19 @@ import Services from './services.js';
 import RecommendedVideosView from './views/RecommendedVideosView.js';
 import AllVideosView from './views/AllVideosView.js';
 import VideoView from './views/VideoView.js'
+import {RoleEnum} from './enums/RoleEnum.js';
+import {ModeEnum} from './enums/ModeEnum.js';
 
-import YoutubeControls from './controls.js'
+import YoutubeControls from './controls.js';
 
 const GlobalVariables = {
     CHLK_API: window['CHLK_API'] || null,
-    STANDARD_IDS: window['STANDARD_IDS'] || [],
+    VIDEO_ID: window['VIDEO_ID'] || null,
     STANDARD_VIDEOS: window['STANDARD_VIDEOS'] || [],
-    ANNOUNCEMENT_APPLICATION_ID: window['ANNOUNCEMENT_APPLICATION_ID'] || null
-}
+    ANNOUNCEMENT_APPLICATION_ID: window['ANNOUNCEMENT_APPLICATION_ID'] || null,
+    ROLE: window['ROLE'] || null,
+    MODE: window['MODE'] || null
+};
 
 class VideosController{
     constructor(){
@@ -24,26 +28,16 @@ class VideosController{
         this.view.refreshAsync(completer);
     }
 
-    isAppReady(){
-        if(typeof this.view == 'VideoView') {
-
-
-            return true;
-        }
-
-        return false;
-    }
-
     updateView_(completer, message){
         this.view.partialRefreshAsync(completer, message);
     }
 
     searchAction(searchQuery){
-        GlobalVariables.CHLK_API.onBeforeClose(this.isAppReady);
-
         var res = Services.VideoService.search(searchQuery).then( videos =>{
             return {
-                videos: videos
+                videos: videos,
+                role: GlobalVariables.ROLE,
+                mode: GlobalVariables.MODE
             };
         });
         this.updateView_(res, 'load-videos');
@@ -51,7 +45,9 @@ class VideosController{
 
     recommendedVideosAction(){
         var model = {
-            standardVideos: GlobalVariables.STANDARD_VIDEOS
+            standardVideos: GlobalVariables.STANDARD_VIDEOS,
+            role: GlobalVariables.ROLE,
+            mode: GlobalVariables.MODE
         };
         var res = new Promise((resolve,reject)=> resolve(model));
         this.pushView_(RecommendedVideosView, res);
@@ -59,16 +55,24 @@ class VideosController{
 
     allVideosAction(){
         var res = Services.VideoService.search(null)
-            .then(videos=>{
+            .then(videos => {
                 return {
-                    videos: videos
+                    videos: videos,
+                    role: GlobalVariables.ROLE,
+                    mode: GlobalVariables.MODE
                 };
             });
         this.pushView_(AllVideosView, res);
     }
 
     viewVideoAction(id){
-        var res = Services.VideoService.getVideoById(id);
+        var res = Services.VideoService.getVideoById(id).then(data => {
+            return {
+                video: data,
+                role: GlobalVariables.ROLE,
+                mode: GlobalVariables.MODE
+            }
+        });
 
         this.pushView_(VideoView, res);
     }
@@ -76,6 +80,27 @@ class VideosController{
 
 $(() => {
     YoutubeControls.Create();
+    var videoController = new VideosController();
 
-    new VideosController().recommendedVideosAction();
+    function isAppReady(data, callback){
+        if(videoController.view.viewName === 'VideoView') {
+            Services.VideoService.attach(videoController.view.model.Id, GlobalVariables.ANNOUNCEMENT_APPLICATION_ID)
+                .then( res => callback(!!res));
+        }
+        else callback(false);
+    }
+
+    GlobalVariables.CHLK_API.onBeforeClose(isAppReady);
+
+    switch(GlobalVariables.MODE){
+        case ModeEnum.EDIT:
+            videoController.recommendedVideosAction();
+            break;
+        case ModeEnum.VIEW: case ModeEnum.GRADING_VIEW:
+            videoController.viewVideoAction(GlobalVariables.VIDEO_ID);
+            break;
+        default:
+            videoController.allVideosAction();
+            break;
+    }
 });

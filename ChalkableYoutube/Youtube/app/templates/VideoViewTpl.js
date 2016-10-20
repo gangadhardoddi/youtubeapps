@@ -3,8 +3,8 @@ import BaseTpl from "./BaseTpl.js";
 
 export default class VideoViewTpl extends BaseTpl{
     constructor(data){
-        super();
-        this.video = data;
+        super(data);
+        this.video = data.video;
     }
 
     get jade(){return VideoViewJade;}

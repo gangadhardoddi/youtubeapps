@@ -4,6 +4,8 @@ import VideoViewTpl from '../templates/VideoViewTpl.js'
 export default class VideoView extends BaseView{
     constructor(videosController){
         super(videosController);
+
+        this.name = 'VideoView';
     }
 
     get cssClass_(){return 'video-view-page'; }
@@ -11,7 +13,6 @@ export default class VideoView extends BaseView{
 
     bindEvents_(){
         super.bindEvents_();
-        var keypressTimeOut;
         this.dom
             .on('click', '.cancel-button', event => { this.controller.recommendedVideosAction(); });
     }

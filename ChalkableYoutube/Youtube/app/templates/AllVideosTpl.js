@@ -1,13 +1,11 @@
-//import view file
 import allVideosJade from "./../jade/all-videos.jade";
 
 import BaseTpl from "./BaseTpl.js";
 import VideosTpl from "./VideosTpl.js";
 
 export default class AllVideosTpl extends BaseTpl{
-
     constructor(data){
-        super();
+        super(data);
         this.videos = data.videos;
     }
 

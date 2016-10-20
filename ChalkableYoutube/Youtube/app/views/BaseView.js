@@ -10,6 +10,7 @@ export default class BaseView{
     get viewSelector_(){return '.' + this.cssClass_;}
     get cssClass_(){} //abstract
     get templateClass_(){} // abstract
+    get viewName(){ return this.name }
 
     bindEvents_(){}
 

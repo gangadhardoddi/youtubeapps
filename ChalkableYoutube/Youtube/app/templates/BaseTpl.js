@@ -1,4 +1,11 @@
+import {RoleEnum} from '../enums/RoleEnum.js';
+import {ModeEnum} from '../enums/ModeEnum.js';
+
 export default class BaseTpl{
+    constructor(data){
+        this.role = data.role;
+        this.mode = data.mode;
+    }
 
     //abstract getter
     get jade(){
@@ -16,5 +23,27 @@ export default class BaseTpl{
         else {
             dom.append(content);
         }
+    }
+
+    isTeacherOrAdmin(){
+        if(!this.role)
+            return false;
+
+        return (this.role == RoleEnum.TEACHER || this.role == RoleEnum.ADMIN);
+    }
+
+    isStudent(){
+        if(!this.role)
+            return false;
+
+        return (this.role == RoleEnum.STUDENT);
+    }
+
+    isAllViewOnly(){
+        return this.mode == ModeEnum.MY_VIEW;
+    }
+
+    isViewMode(){
+        return this.mode == ModeEnum.VIEW;
     }
 }
