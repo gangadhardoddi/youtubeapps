@@ -3,7 +3,7 @@ import BaseTpl from "./BaseTpl.js";
 
 export default class VideosTpl extends BaseTpl{
     constructor(data){
-        super();
+        super(data);
         this.videos = data.videos;
     }
 

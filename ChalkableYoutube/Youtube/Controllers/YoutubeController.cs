@@ -19,7 +19,6 @@ namespace Youtube.Controllers
             var res = new StartupViewData
             {
                 AnnouncementApplicationId = announcementApplicationId,
-                StandardIdsJson = JsonConvert.SerializeObject(standardVideos.Select(x => x.StandardName)),
                 StandardVideosJson = JsonConvert.SerializeObject(standardVideos)
             };
             return View("Index", res);
@@ -44,12 +43,32 @@ namespace Youtube.Controllers
             var video = YoutubeConnector.GetById(id);
 
             await ChalkableConnector.Announcement.UpdateAnnouncementApplicationMeta(announcementApplicationId,
-                    video.ShortTitle, video.Url, video.ShortDescription);
+                    video.ShortTitle, video.ThumbUrl, video.ShortDescription);
 
             var storage = new Storage(ChalkableAuthorization.Configuration.ConnectionString);
             storage.Set(CurrentUser.DistrictId, announcementApplicationId, video.Id);
 
             return ChlkJson(true);
+        }
+
+        public ActionResult View(string id, int announcementApplicationId)
+        {
+            if (string.IsNullOrEmpty(id))
+                id = new Storage(ChalkableAuthorization.Configuration.ConnectionString).Get(CurrentUser.DistrictId, announcementApplicationId);
+
+            if(string.IsNullOrEmpty(id))
+                return View("Error");
+
+            var res = new StartupViewData
+            {
+                AnnouncementApplicationId = announcementApplicationId,
+                StandardVideosJson = "[]",
+                Mode = Settings.VIEW_MODE,
+                Role = CurrentUser.Role.LoweredName,
+                VideoId = id
+            };
+
+            return View("Index", res);
         }
 
         private async Task<StandardVideos> GetVideosForStandardAsync(string code)

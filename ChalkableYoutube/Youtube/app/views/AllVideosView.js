@@ -4,6 +4,8 @@ import AllVideosTpl from './../templates/AllVideosTpl.js';
 export default class AllVideosView extends BaseVideosView{
     constructor(videosController){
         super(videosController);
+
+        this.name = 'AllVideosView';
     }
 
     get cssClass_(){return 'all-videos-page'; }

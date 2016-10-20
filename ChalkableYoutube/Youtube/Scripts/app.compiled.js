@@ -60,15 +60,19 @@
 
 	var _RecommendedVideosView2 = _interopRequireDefault(_RecommendedVideosView);
 
-	var _AllVideosView = __webpack_require__(17);
+	var _AllVideosView = __webpack_require__(19);
 
 	var _AllVideosView2 = _interopRequireDefault(_AllVideosView);
 
-	var _VideoView = __webpack_require__(20);
+	var _VideoView = __webpack_require__(22);
 
 	var _VideoView2 = _interopRequireDefault(_VideoView);
 
-	var _controls = __webpack_require__(23);
+	var _RoleEnum = __webpack_require__(15);
+
+	var _ModeEnum = __webpack_require__(16);
+
+	var _controls = __webpack_require__(25);
 
 	var _controls2 = _interopRequireDefault(_controls);
 
@@ -78,9 +82,11 @@
 
 	var GlobalVariables = {
 	    CHLK_API: window['CHLK_API'] || null,
-	    STANDARD_IDS: window['STANDARD_IDS'] || [],
+	    VIDEO_ID: window['VIDEO_ID'] || null,
 	    STANDARD_VIDEOS: window['STANDARD_VIDEOS'] || [],
-	    ANNOUNCEMENT_APPLICATION_ID: window['ANNOUNCEMENT_APPLICATION_ID'] || null
+	    ANNOUNCEMENT_APPLICATION_ID: window['ANNOUNCEMENT_APPLICATION_ID'] || null,
+	    ROLE: window['ROLE'] || null,
+	    MODE: window['MODE'] || null
 	};
 
 	var VideosController = function () {
@@ -107,7 +113,9 @@
 	        value: function searchAction(searchQuery) {
 	            var res = _services2.default.VideoService.search(searchQuery).then(function (videos) {
 	                return {
-	                    videos: videos
+	                    videos: videos,
+	                    role: GlobalVariables.ROLE,
+	                    mode: GlobalVariables.MODE
 	                };
 	            });
 	            this.updateView_(res, 'load-videos');
@@ -116,7 +124,9 @@
 	        key: 'recommendedVideosAction',
 	        value: function recommendedVideosAction() {
 	            var model = {
-	                standardVideos: GlobalVariables.STANDARD_VIDEOS
+	                standardVideos: GlobalVariables.STANDARD_VIDEOS,
+	                role: GlobalVariables.ROLE,
+	                mode: GlobalVariables.MODE
 	            };
 	            var res = new Promise(function (resolve, reject) {
 	                return resolve(model);
@@ -128,7 +138,9 @@
 	        value: function allVideosAction() {
 	            var res = _services2.default.VideoService.search(null).then(function (videos) {
 	                return {
-	                    videos: videos
+	                    videos: videos,
+	                    role: GlobalVariables.ROLE,
+	                    mode: GlobalVariables.MODE
 	                };
 	            });
 	            this.pushView_(_AllVideosView2.default, res);
@@ -136,7 +148,13 @@
 	    }, {
 	        key: 'viewVideoAction',
 	        value: function viewVideoAction(id) {
-	            var res = _services2.default.VideoService.getVideoById(id);
+	            var res = _services2.default.VideoService.getVideoById(id).then(function (data) {
+	                return {
+	                    video: data,
+	                    role: GlobalVariables.ROLE,
+	                    mode: GlobalVariables.MODE
+	                };
+	            });
 
 	            this.pushView_(_VideoView2.default, res);
 	        }
@@ -147,8 +165,29 @@
 
 	$(function () {
 	    _controls2.default.Create();
+	    var videoController = new VideosController();
 
-	    new VideosController().recommendedVideosAction();
+	    function isAppReady(data, callback) {
+	        if (videoController.view.viewName === 'VideoView') {
+	            _services2.default.VideoService.attach(videoController.view.model.Id, GlobalVariables.ANNOUNCEMENT_APPLICATION_ID).then(function (res) {
+	                return callback(!!res);
+	            });
+	        } else callback(false);
+	    }
+
+	    GlobalVariables.CHLK_API.onBeforeClose(isAppReady);
+
+	    switch (GlobalVariables.MODE) {
+	        case _ModeEnum.ModeEnum.EDIT:
+	            videoController.recommendedVideosAction();
+	            break;
+	        case _ModeEnum.ModeEnum.VIEW:case _ModeEnum.ModeEnum.GRADING_VIEW:
+	            videoController.viewVideoAction(GlobalVariables.VIDEO_ID);
+	            break;
+	        default:
+	            videoController.allVideosAction();
+	            break;
+	    }
 	});
 
 /***/ },
@@ -187,7 +226,7 @@
 
 
 	// module
-	exports.push([module.id, "html {\n  height: 100%; }\n\nbody {\n  background-color: #FCFCFC;\n  height: calc(100% - 35px);\n  overflow: hidden;\n  font-family: 'Open Sans', sans-serif; }\n  body .youtube-main {\n    height: 100%; }\n    body .youtube-main .youtube-header {\n      text-align: center;\n      font-size: 23px;\n      margin-top: 27px;\n      font-weight: 600; }\n  body .content-wrapper {\n    height: 100%; }\n  body .fluid-container {\n    height: 100%; }\n  body .videos-view {\n    height: 100%; }\n  body .all-videos-page {\n    height: 100%; }\n  body .search-videos-form {\n    height: 100%; }\n  body .standard-videos-page {\n    height: 100%; }\n  body .hidden {\n    display: none; }\n  body h1 {\n    text-align: center;\n    font-size: 50pt; }\n  body .close-open-control {\n    text-align: left !important;\n    margin-right: 20px !important; }\n  body .action-bar {\n    margin-top: 30px; }\n  body .search-control {\n    position: relative;\n    display: inline-block;\n    float: right;\n    width: 22%; }\n    body .search-control .search-input {\n      width: 92%;\n      display: inline-block; }\n    body .search-control .title {\n      display: block; }\n    body .search-control .filter-component {\n      display: block; }\n  body .action-bar {\n    clear: both; }\n  body .videos-container {\n    background: #fff;\n    border: 1px solid #c8c7c3;\n    display: inline-block;\n    overflow: auto;\n    text-align: center;\n    padding-top: 30px;\n    padding-left: 25px;\n    min-width: 98%;\n    min-height: 360px;\n    overflow-y: scroll;\n    overflow-x: hidden;\n    max-height: calc(100% - 119px); }\n    body .videos-container .announcement-item.application {\n      padding: 3px; }\n      body .videos-container .announcement-item.application img {\n        border-radius: 2px; }\n    body .videos-container .announcement-item.application:hover .duration {\n      opacity: 0.1; }\n    body .videos-container .shortdesc {\n      text-align: left;\n      white-space: pre-wrap;\n      top: 32px; }\n    body .videos-container .duration {\n      position: absolute;\n      bottom: 42px;\n      right: 2px;\n      z-index: 1;\n      background-color: black;\n      color: white;\n      padding: 0px 2px;\n      opacity: 0.8;\n      border-radius: 2px;\n      font-size: 13px; }\n  body .load-videos {\n    display: table;\n    width: 300pt;\n    height: 50pt;\n    text-align: center;\n    font-size: 20pt;\n    margin: auto;\n    display: block;\n    border: none;\n    background-color: aquamarine; }\n  body .clear-filter {\n    transform: scale(0.7);\n    top: 3%;\n    right: 6%;\n    width: 32px;\n    height: 32px;\n    position: absolute; }\n  body .video-view-page {\n    margin: 10px;\n    text-align: center;\n    overflow-y: scroll;\n    overflow-x: hidden;\n    height: 95%; }\n    body .video-view-page .video-content {\n      display: inline-block;\n      margin: auto; }\n      body .video-view-page .video-content .video-title {\n        text-align: center;\n        font-weight: 600; }\n      body .video-view-page .video-content .video-iframe {\n        width: 761px;\n        height: 434px;\n        border: 5px solid #8a8a8a;\n        border-radius: 4px;\n        box-shadow: #969696 5px 5px 10px;\n        display: block;\n        margin: auto; }\n      body .video-view-page .video-content .video-info {\n        margin-top: 21px;\n        text-align: left;\n        display: inline-block;\n        font-size: 15px; }\n        body .video-view-page .video-content .video-info .video-author {\n          display: inline-block;\n          float: left; }\n        body .video-view-page .video-content .video-info .video-views-count {\n          display: inline-block;\n          float: right; }\n        body .video-view-page .video-content .video-info .video-description {\n          clear: both; }\n          body .video-view-page .video-content .video-info .video-description span:first-child {\n            font-weight: bolder; }\n          body .video-view-page .video-content .video-info .video-description span:nth-child(2) {\n            white-space: pre-wrap;\n            display: block;\n            text-align: left;\n            width: 704px; }\n    body .video-view-page .cancel-button {\n      float: right;\n      margin-bottom: 20px;\n      margin-right: 20px;\n      width: 113px;\n      height: 33px; }\n", ""]);
+	exports.push([module.id, "html {\n  height: 100%; }\n\nbody {\n  background-color: #FCFCFC;\n  height: calc(100% - 35px);\n  overflow: hidden;\n  font-family: 'Open Sans', sans-serif; }\n  body .youtube-main {\n    height: 100%; }\n    body .youtube-main .youtube-header {\n      text-align: center;\n      font-size: 23px;\n      margin-top: 27px;\n      font-weight: 600; }\n  body .content-wrapper {\n    height: 100%; }\n  body .fluid-container {\n    height: 100%; }\n  body .videos-view {\n    height: 100%; }\n  body .all-videos-page {\n    height: 100%; }\n  body .search-videos-form {\n    height: 100%; }\n  body .standard-videos-page {\n    height: 100%; }\n  body .hidden {\n    display: none; }\n  body h1 {\n    text-align: center;\n    font-size: 50pt; }\n  body .close-open-control {\n    text-align: left !important;\n    margin-right: 20px !important; }\n  body .action-bar {\n    margin-top: 30px; }\n  body .search-control {\n    position: relative;\n    display: inline-block;\n    float: right;\n    width: 22%; }\n    body .search-control .search-input {\n      width: 92%;\n      display: inline-block; }\n    body .search-control .title {\n      display: block; }\n    body .search-control .filter-component {\n      display: block; }\n  body .action-bar {\n    clear: both; }\n  body .videos-container {\n    background: #fff;\n    border: 1px solid #c8c7c3;\n    display: inline-block;\n    overflow: auto;\n    text-align: center;\n    padding-top: 30px;\n    padding-left: 25px;\n    min-width: 98%;\n    min-height: 360px;\n    overflow-y: scroll;\n    overflow-x: hidden;\n    max-height: calc(100% - 119px); }\n    body .videos-container .announcement-item.application {\n      padding: 3px; }\n      body .videos-container .announcement-item.application img {\n        border-radius: 2px; }\n    body .videos-container .announcement-item.application:hover .duration {\n      opacity: 0.1; }\n    body .videos-container .shortdesc {\n      text-align: left;\n      white-space: pre-wrap;\n      top: 32px; }\n    body .videos-container .duration {\n      position: absolute;\n      bottom: 42px;\n      right: 2px;\n      z-index: 1;\n      background-color: black;\n      color: white;\n      padding: 0px 2px;\n      opacity: 0.8;\n      border-radius: 2px;\n      font-size: 13px; }\n  body .load-videos {\n    display: table;\n    width: 300pt;\n    height: 50pt;\n    text-align: center;\n    font-size: 20pt;\n    margin: auto;\n    display: block;\n    border: none;\n    background-color: aquamarine; }\n  body .clear-filter {\n    transform: scale(0.7);\n    top: 3%;\n    right: 6%;\n    width: 32px;\n    height: 32px;\n    position: absolute; }\n  body .video-view-page {\n    margin: 10px;\n    text-align: center;\n    overflow-y: scroll;\n    overflow-x: hidden;\n    height: 93%; }\n    body .video-view-page .video-content {\n      display: inline-block;\n      margin: auto; }\n      body .video-view-page .video-content .video-title {\n        text-align: center;\n        font-weight: 600; }\n      body .video-view-page .video-content .video-iframe {\n        width: 761px;\n        height: 434px;\n        border: 5px solid #8a8a8a;\n        border-radius: 4px;\n        box-shadow: #969696 5px 5px 10px;\n        display: block;\n        margin: auto; }\n      body .video-view-page .video-content .video-info {\n        margin-top: 21px;\n        text-align: left;\n        display: inline-block;\n        font-size: 15px; }\n        body .video-view-page .video-content .video-info .video-author {\n          display: inline-block;\n          float: left; }\n        body .video-view-page .video-content .video-info .video-views-count {\n          display: inline-block;\n          float: right; }\n        body .video-view-page .video-content .video-info .video-description {\n          clear: both; }\n          body .video-view-page .video-content .video-info .video-description span:first-child {\n            font-weight: bolder; }\n          body .video-view-page .video-content .video-info .video-description span:nth-child(2) {\n            white-space: pre-wrap;\n            display: block;\n            text-align: left;\n            width: 704px; }\n    body .video-view-page .cancel-button {\n      float: right;\n      margin-bottom: 20px;\n      margin-right: 20px;\n      width: 113px;\n      height: 33px; }\n", ""]);
 
 	// exports
 
@@ -536,6 +575,14 @@
 	            });
 	        }
 	    }, {
+	        key: 'attach',
+	        value: function attach(videoId, announcementApplicationId) {
+	            return VideoService.get("/Youtube/Attach", {
+	                id: videoId,
+	                announcementApplicationId: announcementApplicationId
+	            });
+	        }
+	    }, {
 	        key: 'search',
 	        value: function search(searchQuery) {
 	            return VideoService.get("/Youtube/SearchVideos", {
@@ -581,7 +628,7 @@
 
 	var _BaseVideosView3 = _interopRequireDefault(_BaseVideosView2);
 
-	var _StandardVideosTpl = __webpack_require__(15);
+	var _StandardVideosTpl = __webpack_require__(17);
 
 	var _StandardVideosTpl2 = _interopRequireDefault(_StandardVideosTpl);
 
@@ -599,7 +646,10 @@
 	    function RecommendedVideosView(videosController) {
 	        _classCallCheck(this, RecommendedVideosView);
 
-	        return _possibleConstructorReturn(this, (RecommendedVideosView.__proto__ || Object.getPrototypeOf(RecommendedVideosView)).call(this, videosController));
+	        var _this = _possibleConstructorReturn(this, (RecommendedVideosView.__proto__ || Object.getPrototypeOf(RecommendedVideosView)).call(this, videosController));
+
+	        _this.name = 'RecommendedVideosView';
+	        return _this;
 	    }
 
 	    _createClass(RecommendedVideosView, [{
@@ -771,8 +821,6 @@
 
 	    _createClass(BaseView, [{
 	        key: 'bindEvents_',
-	        // abstract
-
 	        value: function bindEvents_() {}
 	    }, {
 	        key: 'show',
@@ -845,7 +893,13 @@
 
 	    }, {
 	        key: 'templateClass_',
-	        get: function get() {}
+	        get: function get() {} // abstract
+
+	    }, {
+	        key: 'viewName',
+	        get: function get() {
+	            return this.name;
+	        }
 	    }]);
 
 	    return BaseView;
@@ -887,7 +941,7 @@
 	    function VideosTpl(data) {
 	        _classCallCheck(this, VideosTpl);
 
-	        var _this = _possibleConstructorReturn(this, (VideosTpl.__proto__ || Object.getPrototypeOf(VideosTpl)).call(this));
+	        var _this = _possibleConstructorReturn(this, (VideosTpl.__proto__ || Object.getPrototypeOf(VideosTpl)).call(this, data));
 
 	        _this.videos = data.videos;
 	        return _this;
@@ -1234,7 +1288,7 @@
 
 /***/ },
 /* 14 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
@@ -1244,12 +1298,22 @@
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+	var _RoleEnum = __webpack_require__(15);
+
+	var _ModeEnum = __webpack_require__(16);
+
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	var BaseTpl = function () {
-	    function BaseTpl() {
+	    function BaseTpl(data) {
 	        _classCallCheck(this, BaseTpl);
+
+	        this.role = data.role;
+	        this.mode = data.mode;
 	    }
+
+	    //abstract getter
+
 
 	    _createClass(BaseTpl, [{
 	        key: 'render',
@@ -1267,10 +1331,31 @@
 	            }
 	        }
 	    }, {
+	        key: 'isTeacherOrAdmin',
+	        value: function isTeacherOrAdmin() {
+	            if (!this.role) return false;
+
+	            return this.role == _RoleEnum.RoleEnum.TEACHER || this.role == _RoleEnum.RoleEnum.ADMIN;
+	        }
+	    }, {
+	        key: 'isStudent',
+	        value: function isStudent() {
+	            if (!this.role) return false;
+
+	            return this.role == _RoleEnum.RoleEnum.STUDENT;
+	        }
+	    }, {
+	        key: 'isAllViewOnly',
+	        value: function isAllViewOnly() {
+	            return this.mode == _ModeEnum.ModeEnum.MY_VIEW;
+	        }
+	    }, {
+	        key: 'isViewMode',
+	        value: function isViewMode() {
+	            return this.mode == _ModeEnum.ModeEnum.VIEW;
+	        }
+	    }, {
 	        key: 'jade',
-
-
-	        //abstract getter
 	        get: function get() {
 	            throw new Error('Not implemented exception. jadeView method is not implemented.');
 	        }
@@ -1283,6 +1368,37 @@
 
 /***/ },
 /* 15 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	var RoleEnum = exports.RoleEnum = {
+	    TEACHER: "teacher",
+	    STUDENT: "student",
+	    ADMIN: "admin"
+	};
+
+/***/ },
+/* 16 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	var ModeEnum = exports.ModeEnum = {
+	    EDIT: "edit",
+	    VIEW: "view",
+	    MY_VIEW: "myview",
+	    GRADING_VIEW: "gradingview"
+	};
+
+/***/ },
+/* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -1293,7 +1409,7 @@
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _standardVideos = __webpack_require__(16);
+	var _standardVideos = __webpack_require__(18);
 
 	var _standardVideos2 = _interopRequireDefault(_standardVideos);
 
@@ -1319,7 +1435,7 @@
 	    function StandardVideosTpl(data) {
 	        _classCallCheck(this, StandardVideosTpl);
 
-	        var _this = _possibleConstructorReturn(this, (StandardVideosTpl.__proto__ || Object.getPrototypeOf(StandardVideosTpl)).call(this));
+	        var _this = _possibleConstructorReturn(this, (StandardVideosTpl.__proto__ || Object.getPrototypeOf(StandardVideosTpl)).call(this, data));
 
 	        _this.standardVideos = data.standardVideos;
 	        return _this;
@@ -1351,7 +1467,7 @@
 	exports.default = StandardVideosTpl;
 
 /***/ },
-/* 16 */
+/* 18 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -1466,7 +1582,7 @@
 	};
 
 /***/ },
-/* 17 */
+/* 19 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1483,7 +1599,7 @@
 
 	var _BaseVideosView3 = _interopRequireDefault(_BaseVideosView2);
 
-	var _AllVideosTpl = __webpack_require__(18);
+	var _AllVideosTpl = __webpack_require__(20);
 
 	var _AllVideosTpl2 = _interopRequireDefault(_AllVideosTpl);
 
@@ -1501,7 +1617,10 @@
 	    function AllVideosView(videosController) {
 	        _classCallCheck(this, AllVideosView);
 
-	        return _possibleConstructorReturn(this, (AllVideosView.__proto__ || Object.getPrototypeOf(AllVideosView)).call(this, videosController));
+	        var _this = _possibleConstructorReturn(this, (AllVideosView.__proto__ || Object.getPrototypeOf(AllVideosView)).call(this, videosController));
+
+	        _this.name = 'AllVideosView';
+	        return _this;
 	    }
 
 	    _createClass(AllVideosView, [{
@@ -1549,7 +1668,7 @@
 	exports.default = AllVideosView;
 
 /***/ },
-/* 18 */
+/* 20 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -1560,7 +1679,7 @@
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _allVideos = __webpack_require__(19);
+	var _allVideos = __webpack_require__(21);
 
 	var _allVideos2 = _interopRequireDefault(_allVideos);
 
@@ -1578,8 +1697,7 @@
 
 	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } //import view file
-
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 	var AllVideosTpl = function (_BaseTpl) {
 	    _inherits(AllVideosTpl, _BaseTpl);
@@ -1587,7 +1705,7 @@
 	    function AllVideosTpl(data) {
 	        _classCallCheck(this, AllVideosTpl);
 
-	        var _this = _possibleConstructorReturn(this, (AllVideosTpl.__proto__ || Object.getPrototypeOf(AllVideosTpl)).call(this));
+	        var _this = _possibleConstructorReturn(this, (AllVideosTpl.__proto__ || Object.getPrototypeOf(AllVideosTpl)).call(this, data));
 
 	        _this.videos = data.videos;
 	        return _this;
@@ -1619,7 +1737,7 @@
 	exports.default = AllVideosTpl;
 
 /***/ },
-/* 19 */
+/* 21 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -1676,9 +1794,11 @@
 	        jade_mixins["VideosFilters"]();
 	        jade_mixins["ActionBar"].call({
 	          block: function block() {
-	            jade_mixins["ActionLinkButton"].call({
-	              attributes: { "class": "all-action" }
-	            }, "javascript:", "Recommended");
+	            if (data.isAllViewOnly()) {
+	              jade_mixins["ActionLinkButton"].call({
+	                attributes: { "class": "all-action" }
+	              }, "javascript:", "Recommended");
+	            }
 	            buf.push("<div class=\"pressed\">All</div>");
 	          }
 	        });
@@ -1691,7 +1811,7 @@
 	};
 
 /***/ },
-/* 20 */
+/* 22 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1708,7 +1828,7 @@
 
 	var _BaseView3 = _interopRequireDefault(_BaseView2);
 
-	var _VideoViewTpl = __webpack_require__(21);
+	var _VideoViewTpl = __webpack_require__(23);
 
 	var _VideoViewTpl2 = _interopRequireDefault(_VideoViewTpl);
 
@@ -1726,7 +1846,10 @@
 	    function VideoView(videosController) {
 	        _classCallCheck(this, VideoView);
 
-	        return _possibleConstructorReturn(this, (VideoView.__proto__ || Object.getPrototypeOf(VideoView)).call(this, videosController));
+	        var _this = _possibleConstructorReturn(this, (VideoView.__proto__ || Object.getPrototypeOf(VideoView)).call(this, videosController));
+
+	        _this.name = 'VideoView';
+	        return _this;
 	    }
 
 	    _createClass(VideoView, [{
@@ -1735,18 +1858,9 @@
 	            var _this2 = this;
 
 	            _get(VideoView.prototype.__proto__ || Object.getPrototypeOf(VideoView.prototype), 'bindEvents_', this).call(this);
-	            var keypressTimeOut;
 	            this.dom.on('click', '.cancel-button', function (event) {
 	                _this2.controller.recommendedVideosAction();
 	            });
-	            //    .on("click", ".action-bar a", event=>{this.controller.recommendedVideosAction()})
-	            //    .on('input', "[name=searchQuery]", event=> {
-	            //         clearTimeout(keypressTimeOut);
-	            //         keypressTimeOut = setTimeout(() => {
-	            //           var formSelector = $(event.target).parents(this.loadVideosFormSelector_);
-	            //           formSelector.trigger('submit');
-	            //        }, 700);
-	            //    });
 	        }
 	    }, {
 	        key: 'cssClass_',
@@ -1766,7 +1880,7 @@
 	exports.default = VideoView;
 
 /***/ },
-/* 21 */
+/* 23 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -1777,7 +1891,7 @@
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _videoView = __webpack_require__(22);
+	var _videoView = __webpack_require__(24);
 
 	var _videoView2 = _interopRequireDefault(_videoView);
 
@@ -1799,9 +1913,9 @@
 	    function VideoViewTpl(data) {
 	        _classCallCheck(this, VideoViewTpl);
 
-	        var _this = _possibleConstructorReturn(this, (VideoViewTpl.__proto__ || Object.getPrototypeOf(VideoViewTpl)).call(this));
+	        var _this = _possibleConstructorReturn(this, (VideoViewTpl.__proto__ || Object.getPrototypeOf(VideoViewTpl)).call(this, data));
 
-	        _this.video = data;
+	        _this.video = data.video;
 	        return _this;
 	    }
 
@@ -1823,7 +1937,7 @@
 	exports.default = VideoViewTpl;
 
 /***/ },
-/* 22 */
+/* 24 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -1836,12 +1950,16 @@
 	  var jade_interp;
 	  ;var locals_for_with = locals || {};(function (data) {
 	    var video = data.video;
-	    buf.push("<div class=\"video-content\"><h2 class=\"video-title\">" + jade.escape(null == (jade_interp = video.Title) ? "" : jade_interp) + "</h2><iframe" + jade.attr("src", video.Url, true, true) + " allowfullscreen class=\"video-iframe\"></iframe><div class=\"video-info\"><div class=\"video-author\"><b>" + jade.escape(null == (jade_interp = "Contributed by") ? "" : jade_interp) + "</b></div>" + jade.escape(null == (jade_interp = "_" + video.Author) ? "" : jade_interp) + "<div class=\"video-views-count\"><b>" + jade.escape(null == (jade_interp = video.Views + " views") ? "" : jade_interp) + "</b></div><div class=\"video-description\"><span>" + jade.escape(null == (jade_interp = 'Description:') ? "" : jade_interp) + "</span><span>" + jade.escape(null == (jade_interp = video.Description) ? "" : jade_interp) + "</span></div></div></div><div class=\"video-view-footer\"><button name=\"Cancel\" class=\"cancel-button\">" + jade.escape(null == (jade_interp = "Cancel") ? "" : jade_interp) + "</button></div>");
+	    buf.push("<div class=\"video-content\"><h2 class=\"video-title\">" + jade.escape(null == (jade_interp = video.Title) ? "" : jade_interp) + "</h2><iframe" + jade.attr("src", video.Url, true, true) + " allowfullscreen class=\"video-iframe\"></iframe><div class=\"video-info\"><div class=\"video-author\"><b>" + jade.escape(null == (jade_interp = "Contributed by") ? "" : jade_interp) + "</b></div>" + jade.escape(null == (jade_interp = "_" + video.Author) ? "" : jade_interp) + "<div class=\"video-views-count\"><b>" + jade.escape(null == (jade_interp = video.Views + " views") ? "" : jade_interp) + "</b></div><div class=\"video-description\"><span>" + jade.escape(null == (jade_interp = 'Description:') ? "" : jade_interp) + "</span><span>" + jade.escape(null == (jade_interp = video.Description) ? "" : jade_interp) + "</span></div></div></div><div class=\"video-view-footer\">");
+	    if (data.isTeacherOrAdmin() && !data.isViewMode()) {
+	      buf.push("<button name=\"Cancel\" class=\"cancel-button\">" + jade.escape(null == (jade_interp = "Cancel") ? "" : jade_interp) + "</button>");
+	    }
+	    buf.push("</div>");
 	  }).call(this, "data" in locals_for_with ? locals_for_with.data : typeof data !== "undefined" ? data : undefined);;return buf.join("");
 	};
 
 /***/ },
-/* 23 */
+/* 25 */
 /***/ function(module, exports) {
 
 	'use strict';

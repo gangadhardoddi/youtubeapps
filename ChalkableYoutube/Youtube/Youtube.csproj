@@ -312,11 +312,12 @@
     <Content Include="Views\Web.config">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="Views\Youtube\Index.cshtml" />
+    <Content Include="Views\Shared\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Filters\" />
+    <Folder Include="Views\Youtube\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">
@@ -339,7 +340,6 @@
       <LastGenOutput>DataModel.designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
-    <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Shared\NotSupported.cshtml" />
     <Content Include="Scripts\jquery-2.2.3.min.map" />
   </ItemGroup>

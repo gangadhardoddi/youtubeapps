@@ -4,7 +4,7 @@ import VideosTpl from "./VideosTpl.js"
 
 export default class StandardVideosTpl extends BaseTpl{
     constructor(data){
-        super();
+        super(data);
         this.standardVideos = data.standardVideos;
     }
 

@@ -11,7 +11,9 @@ namespace Youtube.Models
     }
     public class StartupViewData : BaseViewData
     {
-        public string StandardIdsJson { get; set; }
+        public string Mode { get; set; }
+        public string Role { get; set; }
         public string StandardVideosJson { get; set; }
+        public string VideoId { get; set; }
     }
 }
