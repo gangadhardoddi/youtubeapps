@@ -1312,9 +1312,6 @@
 	        this.mode = data.mode;
 	    }
 
-	    //abstract getter
-
-
 	    _createClass(BaseTpl, [{
 	        key: 'render',
 	        value: function render() {

@@ -7,7 +7,6 @@ export default class BaseTpl{
         this.mode = data.mode;
     }
 
-    //abstract getter
     get jade(){
         throw new Error('Not implemented exception. jadeView method is not implemented.')
     }
@@ -15,6 +14,7 @@ export default class BaseTpl{
     render(){
         return this.jade({data:this});
     }
+
     renderTo(dom, append){
         var content = this.render();
         if(!append){

@@ -6,13 +6,21 @@ export default class BaseView{
         this.controller = controller;
     }
 
-    get dom(){return this._parentDom.find(this.viewSelector_);}
-    get viewSelector_(){return '.' + this.cssClass_;}
-    get cssClass_(){} //abstract
-    get templateClass_(){} // abstract
-    get viewName(){ return this.name }
+    get dom() {
+        return this._parentDom.find(this.viewSelector_);
+    }
 
-    bindEvents_(){}
+    get viewSelector_() {
+        return '.' + this.cssClass_;
+    }
+
+    get cssClass_() { } //abstract
+    get templateClass_() { } // abstract
+    get viewName() {
+        return this.name
+    }
+
+    bindEvents_() { }
 
     show(){
         $(this._parentDom).html('<div class="' + this.cssClass_ + '"></div>')
@@ -29,7 +37,7 @@ export default class BaseView{
 
     partialRefreshAsync(promisse, message, append){
         this.showLoader();
-        promisse.then(model=>{
+        promisse.then(model => {
             this.onPartialRefresh_(model, message, append);
             this.hideLoader();
         });
@@ -40,9 +48,9 @@ export default class BaseView{
         this.model = model;
     }
 
-    onPartialRefresh_(model, message, append){ }
+    onPartialRefresh_(model, message, append) { }
 
-    showLoader(){
+    showLoader() {
         if($('.loading-page').length == 0){
             var loader = '<div class="loading-page"></div>';
             this.dom.append(loader);
@@ -50,9 +58,9 @@ export default class BaseView{
         }
     }
 
-    hideLoader(){
+    hideLoader() {
         var loader = this.dom.find('.loading-page');
-        if(loader.length > 0){
+        if(loader.length > 0) {
             loader.remove();
             $('.videos-container').css('opacity', '1');
         }

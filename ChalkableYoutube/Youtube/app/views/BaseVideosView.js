@@ -44,7 +44,7 @@ export default class BaseVideosView extends BaseView{
         super.onRefresh_(model);
     }
 
-    onPartialRefresh_(model, message, append){
+    onPartialRefresh_(model, message, append) {
         super.onPartialRefresh_(model, message, append);
         if(message == 'load-videos'){
             var dom = $(this.loadVideosFormSelector_ + '.submit-process');
