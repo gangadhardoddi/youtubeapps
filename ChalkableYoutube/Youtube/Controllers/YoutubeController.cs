@@ -84,6 +84,9 @@ namespace Youtube.Controllers
 
         public static IList<string> GetStandardCodes(string standardIds, ChalkableConnector chlkConnector)
         {
+            if(string.IsNullOrEmpty(standardIds))
+                return new List<string>();
+
             Guid parsed;
             IList<Guid> standardsGuids = new List<Guid>();
 

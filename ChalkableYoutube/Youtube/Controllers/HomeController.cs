@@ -29,6 +29,13 @@ namespace Youtube.Controllers
             switch (mode)
             {
                 case Settings.EDIT_MODE:
+
+                    if (!string.IsNullOrEmpty(contentId))
+                    {
+                        actionParams.Add("id", contentId);
+                        return RedirectToAction("View", "Youtube", actionParams);
+                    }
+
                     actionParams.Add("standardIds", standards.Select(x => x.StandardId).JoinString(","));
                     return RedirectToAction("Edit", "Youtube", actionParams);
 
