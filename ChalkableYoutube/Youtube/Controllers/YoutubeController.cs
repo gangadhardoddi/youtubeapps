@@ -12,14 +12,16 @@ namespace Youtube.Controllers
 {
     public class YoutubeController : BaseController
     {
-        public async Task<ActionResult> Index(string standardIds, int announcementApplicationId)
+        public ActionResult Edit(string standardIds, int announcementApplicationId)
         {
-            var standardVideos = await GetRecommended(standardIds);
+            var standardVideos = GetRecommended(standardIds);
             standardVideos = standardVideos.Where(x => x.Videos != null && x.Videos.Count > 0).ToList();
             var res = new StartupViewData
             {
                 AnnouncementApplicationId = announcementApplicationId,
-                StandardVideosJson = JsonConvert.SerializeObject(standardVideos)
+                StandardVideosJson = JsonConvert.SerializeObject(standardVideos),
+                Mode = Settings.EDIT_MODE,
+                Role = CurrentUser.Role.LoweredName
             };
             return View("Index", res);
         }
@@ -27,14 +29,12 @@ namespace Youtube.Controllers
         public ActionResult SearchVideos(string searchQuery)
         {
             var videos = YoutubeConnector.Search(searchQuery);
-
             return ChlkJson(videos);
         }
 
         public ActionResult Video(string id)
         {
             var video = YoutubeConnector.GetById(id);
-
             return ChlkJson(video);
         }
 
@@ -71,19 +71,18 @@ namespace Youtube.Controllers
             return View("Index", res);
         }
 
-        private async Task<StandardVideos> GetVideosForStandardAsync(string code)
+        private StandardVideos GetVideosForStandard(string code)
         {
-            await Task.Delay(0);
             var res = new StandardVideos
             {
-                StandardName = code
+                StandardName = code,
+                Videos = YoutubeConnector.Search(code, 20).ToList()
             };
 
-            res.Videos = YoutubeConnector.Search(code, 20).ToList();
             return res;
         }
 
-        private static IList<string> GetStandardCodes(string standardIds, ChalkableConnector chlkConnector)
+        public static IList<string> GetStandardCodes(string standardIds, ChalkableConnector chlkConnector)
         {
             Guid parsed;
             IList<Guid> standardsGuids = new List<Guid>();
@@ -113,13 +112,12 @@ namespace Youtube.Controllers
             return codes.Take(20).ToList();
         }
 
-        private async Task<IList<StandardVideos>> GetRecommended(string standardIds)
+        private IList<StandardVideos> GetRecommended(string standardIds)
         {
             var codes = GetStandardCodes(standardIds, ChalkableConnector);
-            var tasks = codes.Select(async x => await GetVideosForStandardAsync(x));
-            var standardVideos = await Task.WhenAll(tasks);
+            var standardVideos = codes.Select(GetVideosForStandard);
 
-            return standardVideos;
+            return standardVideos.ToList();
         }
     }
 }

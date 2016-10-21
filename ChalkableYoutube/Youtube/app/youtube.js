@@ -84,7 +84,7 @@ $(() => {
 
     function isAppReady(data, callback){
         if(videoController.view.viewName === 'VideoView') {
-            Services.VideoService.attach(videoController.view.model.Id, GlobalVariables.ANNOUNCEMENT_APPLICATION_ID)
+            Services.VideoService.attach(videoController.view.model.video.Id, GlobalVariables.ANNOUNCEMENT_APPLICATION_ID)
                 .then( res => callback(!!res));
         }
         else callback(false);
