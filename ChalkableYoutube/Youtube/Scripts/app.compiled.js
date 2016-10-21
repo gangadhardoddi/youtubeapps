@@ -1375,7 +1375,7 @@
 	var RoleEnum = exports.RoleEnum = {
 	    TEACHER: "teacher",
 	    STUDENT: "student",
-	    ADMIN: "admin"
+	    ADMIN: "districtadmin"
 	};
 
 /***/ },
