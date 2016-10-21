@@ -26,6 +26,20 @@ namespace Youtube.Controllers
             return View("Index", res);
         }
 
+        public ActionResult All()
+        {
+            var model = new StartupViewData
+            {
+                AnnouncementApplicationId = 0,
+                Mode = Settings.MY_VIEW_MODE,
+                VideoId = null,
+                StandardVideosJson = "[]",
+                Role = CurrentUser.Role.LoweredName
+            };
+
+            return View("Index", model);
+        }
+
         public ActionResult SearchVideos(string searchQuery)
         {
             var videos = YoutubeConnector.Search(searchQuery);

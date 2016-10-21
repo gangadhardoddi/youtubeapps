@@ -12,7 +12,7 @@
         var ROLE = "@Html.Raw(Model.Role)";
         var VIDEO_ID = "@Html.Raw(Model.VideoId)";
         var STANDARD_VIDEOS = @Html.Raw(Model.StandardVideosJson);
-        var ANNOUNCEMENT_APPLICATION_ID = @Html.Raw(Model.AnnouncementApplicationId);
+        var ANNOUNCEMENT_APPLICATION_ID = @Html.Raw(Model.AnnouncementApplicationId ?? 0);
     </script>
 }
 
