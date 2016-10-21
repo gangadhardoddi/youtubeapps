@@ -179,7 +179,7 @@
 
 	    switch (GlobalVariables.MODE) {
 	        case _ModeEnum.ModeEnum.EDIT:
-	            videoController.recommendedVideosAction();
+	            if (GlobalVariables.ROLE == _RoleEnum.RoleEnum.ADMIN) videoController.allVideosAction();else videoController.recommendedVideosAction();
 	            break;
 	        case _ModeEnum.ModeEnum.VIEW:case _ModeEnum.ModeEnum.GRADING_VIEW:
 	            videoController.viewVideoAction(GlobalVariables.VIDEO_ID);
@@ -1335,6 +1335,11 @@
 	            return this.role == _RoleEnum.RoleEnum.TEACHER || this.role == _RoleEnum.RoleEnum.ADMIN;
 	        }
 	    }, {
+	        key: 'isAdmin',
+	        value: function isAdmin() {
+	            return this.role == _RoleEnum.RoleEnum.ADMIN;
+	        }
+	    }, {
 	        key: 'isStudent',
 	        value: function isStudent() {
 	            if (!this.role) return false;
@@ -1791,7 +1796,7 @@
 	        jade_mixins["VideosFilters"]();
 	        jade_mixins["ActionBar"].call({
 	          block: function block() {
-	            if (!data.isAllViewOnly()) {
+	            if (!data.isAllViewOnly() && !data.isAdmin()) {
 	              jade_mixins["ActionLinkButton"].call({
 	                attributes: { "class": "all-action" }
 	              }, "javascript:", "Recommended");

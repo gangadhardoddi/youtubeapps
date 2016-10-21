@@ -94,7 +94,10 @@ $(() => {
 
     switch(GlobalVariables.MODE){
         case ModeEnum.EDIT:
-            videoController.recommendedVideosAction();
+            if(GlobalVariables.ROLE == RoleEnum.ADMIN)
+                videoController.allVideosAction();
+            else
+                videoController.recommendedVideosAction();
             break;
         case ModeEnum.VIEW: case ModeEnum.GRADING_VIEW:
             videoController.viewVideoAction(GlobalVariables.VIDEO_ID);

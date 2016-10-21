@@ -32,6 +32,10 @@ export default class BaseTpl{
         return (this.role == RoleEnum.TEACHER || this.role == RoleEnum.ADMIN);
     }
 
+    isAdmin(){
+        return (this.role == RoleEnum.ADMIN);
+    }
+
     isStudent(){
         if(!this.role)
             return false;
