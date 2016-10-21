@@ -40,14 +40,7 @@ namespace Youtube.Controllers
                     return RedirectToAction("Edit", "Youtube", actionParams);
 
                 case Settings.MY_VIEW_MODE:
-                    return View("Index", new StartupViewData
-                    {
-                        AnnouncementApplicationId = announcementApplicationId,
-                        Mode = Settings.MY_VIEW_MODE,
-                        VideoId = null,
-                        StandardVideosJson = "[]",
-                        Role = CurrentUser.Role.LoweredName
-                    });
+                    return RedirectToAction("All", "Youtube");
 
                 case Settings.VIEW_MODE:
                     actionParams.Add("id", contentId);
