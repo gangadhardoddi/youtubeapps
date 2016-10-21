@@ -1,5 +1,4 @@
 import allVideosJade from "./../jade/all-videos.jade";
-
 import BaseTpl from "./BaseTpl.js";
 import VideosTpl from "./VideosTpl.js";
 
@@ -9,7 +8,9 @@ export default class AllVideosTpl extends BaseTpl{
         this.videos = data.videos;
     }
 
-    get jade(){return allVideosJade; }
+    get jade(){
+        return allVideosJade;
+    }
 
     static renderTo(data, dom, append){
         var tpl = new AllVideosTpl(data);

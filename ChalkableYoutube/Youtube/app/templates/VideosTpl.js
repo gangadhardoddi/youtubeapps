@@ -7,7 +7,9 @@ export default class VideosTpl extends BaseTpl{
         this.videos = data.videos;
     }
 
-    get jade(){return videosView;}
+    get jade(){
+        return videosView;
+    }
 
     static renderTo(data, dom, append){
         new VideosTpl(data).renderTo(dom, append);

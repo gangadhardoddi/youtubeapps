@@ -274,8 +274,6 @@
     <Compile Include="Logic\Data\StringConstructedObjectBinder.cs" />
     <Compile Include="Logic\Storage.cs" />
     <Compile Include="Logic\YoutubeConnector.cs" />
-    <Compile Include="Models\SearchModel.cs" />
-    <Compile Include="Models\SearchResult.cs" />
     <Compile Include="Models\StandardVideos.cs" />
     <Compile Include="Models\StartupViewData.cs" />
     <Compile Include="Models\VideoModel.cs" />
@@ -317,21 +315,11 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Filters\" />
-    <Folder Include="Views\Youtube\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">
       <SubType>Designer</SubType>
     </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Home\Edit.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Home\Preview.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Home\Video.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Code\Helpers.cshtml" />

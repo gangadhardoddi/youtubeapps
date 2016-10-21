@@ -3,8 +3,12 @@ class BaseControl{
     constructor(){
         this.bindEvents_();
     }
+
     bindEvents_(){}
-    get dom(){return $('body');}
+
+    get dom(){
+        return $('body');
+    }
 }
 
 const ENTER_KEY = 13;
@@ -33,7 +37,7 @@ export class SearchControl extends BaseControl{
     }
 }
 
-export class CloseOpenControl extends BaseControl{
+export class CloseOpenControl extends BaseControl {
     bindEvents_(){
         super.bindEvents_();
         this.dom
@@ -42,7 +46,7 @@ export class CloseOpenControl extends BaseControl{
                 var node = $(event.target).parents('.close-open-control');
                 var closeOpenBlock = node.find('.close-open-block');
                 timeout && clearTimeout(timeout);
-                if(node.hasClass('co-opened')){
+                if(node.hasClass('co-opened')) {
                     closeOpenBlock.css('height', 0);
                     node.removeClass('co-opened');
                 }
@@ -50,14 +54,12 @@ export class CloseOpenControl extends BaseControl{
                     closeOpenBlock.css('height', 'auto');
                     node.addClass('co-opened');
                 }
-                timeout = setTimeout(()=> node.addClass('co-finished'), 200)
+                timeout = setTimeout(()=> node.addClass('co-finished'), 200);
             })
     }
 }
 
-
 export default class YoutubeControls{
-
     static Create(){
         return {
             SearchControl: new SearchControl(),
