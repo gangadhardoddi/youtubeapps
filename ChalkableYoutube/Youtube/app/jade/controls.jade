@@ -1,0 +1,37 @@
+
+mixin Hidden(name, value)
+   input(type="hidden", name=name, value=value)
+
+mixin SearchControl(value, name, placeholder)
+   .search-control
+      input(type="text", name=name, value=value placeholder=placeholder).search-input
+      .search-glass
+      .close-btn.clear-filter.clear-search.hidden
+
+mixin PaginatedForm(name, classes, data)
+   form(name=name class= classes)&attributes(attributes)
+      block
+
+mixin CloseOpen(title)
+   div()&attributes(attributes).close-open-control.co-finished.co-opened.finished.mp-50.mp-10
+      h3=title
+         .co-open
+         .co-close
+      .close-open-block
+         block
+
+
+mixin VideosFilters()
+   .search-filters
+         +SearchControl("", "searchQuery", " Search Youtube")
+
+mixin ActionLinkButton(link, displayName)
+   span.chlk-button.action-button
+      span
+         span
+            a&attributes(attributes).action-link(href=link).not-blue=displayName
+
+mixin ActionBar()
+   .action-bar
+      .items
+         block

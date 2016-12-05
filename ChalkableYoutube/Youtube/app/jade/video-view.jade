@@ -1,0 +1,16 @@
+-var video = data.video
+.video-content
+    h2.video-title=video.Title
+    iframe(src=video.Url, allowfullscreen).video-iframe
+    .video-info
+        .video-author
+            b="Contributed by"
+        ="_"+video.Author
+        .video-views-count
+            b=video.Views+" views"
+        .video-description
+            span='Description:'
+            span=video.Description
+.video-view-footer
+    if data.isTeacherOrAdmin() && !data.isViewMode()
+        button(name="Cancel").cancel-button="Cancel"

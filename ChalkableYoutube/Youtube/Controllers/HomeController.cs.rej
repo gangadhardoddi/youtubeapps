@@ -1,0 +1,31 @@
+--- HomeController.cs
++++ HomeController.cs
+@@ -80,8 +70,24 @@
+ 
+-            var videosTasks = q.Select(x => Task.Factory.StartNew(() => connector.Search(x).ToList())).ToList();
+-            foreach(var videos in videosTasks)
+-                searchModel.Videos.AddRange(await videos);
+-            return View("Edit", searchModel);
++            return Json(true);
++
++            //var q = string.IsNullOrWhiteSpace(query) 
++            //    ? new List<string> { "" } 
++            //    : query.Split(new[] {','}, StringSplitOptions.RemoveEmptyEntries).ToList();
++
++            //var searchModel = new SearchModel
++            //{
++            //    Query = q.Select(x => x.Trim()).ToList(),
++            //    AnnouncementApplicationId = announcementApplicationId ?? 0,
++            //    DistrictId = districtId,
++            //    IsMyAppsView = myAppsView
++            //};
++            //var connector = new YoutubeConnector();
++            //searchModel.Videos = new List<VideoModel>();
++
++            //var videosTasks = q.Select(x => Task.Factory.StartNew(() => connector.Search(x).ToList())).ToList();
++            //foreach(var videos in videosTasks)
++            //    searchModel.Videos.AddRange(await videos);
++            //return View("Edit", searchModel);
+         }
+ 
+         public ActionResult ViewVideo(string id)

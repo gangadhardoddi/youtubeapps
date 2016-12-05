@@ -1,0 +1,14 @@
+include controls
+
+mixin RenderVideos(tpl, videos)
+    -buf.push(tpl.renderVideosTpl(videos))
+
++PaginatedForm("searchVideosForm", 'search-videos-form', data)
+    +VideosFilters()
+    +ActionBar()
+        if !data.isAllViewOnly() && !data.isAdmin()
+            +ActionLinkButton("javascript:", "Recommended").all-action
+        .pressed All
+    .videos-container
+        .attachments-and-applications
+            +RenderVideos(data, data.videos)

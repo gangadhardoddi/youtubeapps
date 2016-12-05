@@ -1,0 +1,11 @@
+include controls
+
+each item in data.videos
+   .announcement-item.application
+      .wrapper
+         +Hidden('id', item.Id)
+         img(src=item.ThumbUrl)
+         .duration=item.Duration
+         .title=item.ShortTitle
+         .shortdesc=item.ShortDescription
+         +ActionLinkButton("javascript:", "Open").download-link

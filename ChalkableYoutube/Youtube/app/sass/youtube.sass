@@ -1,0 +1,183 @@
+html
+  height: 100%
+
+body
+  background-color: #FCFCFC
+  height: calc(100% - 35px)
+  overflow: hidden
+  font-family: 'Open Sans', sans-serif
+
+  .youtube-main
+    height: 100%
+
+    .youtube-header
+      text-align: center
+      font-size: 23px
+      margin-top: 27px
+      font-weight: 600
+
+  .content-wrapper
+    height: 100%
+
+  .fluid-container
+    height: 100%
+
+  .videos-view
+    height: 100%
+
+  .all-videos-page
+    height: 100%
+
+  .search-videos-form
+    height: 100%
+
+  .standard-videos-page
+    height: 100%
+
+  .hidden
+    display: none
+
+  h1
+    text-align: center
+    font-size: 50pt
+
+  .close-open-control
+    text-align: left !important
+    margin-right: 20px !important
+
+  .action-bar
+    margin-top: 30px
+
+  .search-control
+    position: relative
+    display: inline-block
+    float: right
+    width: 22%
+
+    .search-input
+      width: 92%
+      display: inline-block
+
+    .title
+      display: block
+    .filter-component
+      display: block
+
+  .action-bar
+    clear: both
+
+  .videos-container
+    background: #fff
+    border: 1px solid #c8c7c3
+    display: inline-block
+    overflow: auto
+    text-align: center
+    padding-top: 30px
+    padding-left: 25px
+    min-width: 98%
+    min-height: 360px
+    overflow-y: scroll
+    overflow-x: hidden
+    max-height: calc(100% - 130px)
+
+    .announcement-item.application
+      padding: 3px
+
+      img
+        border-radius: 2px
+
+    .announcement-item.application:hover .duration
+      opacity: 0.1
+
+    .shortdesc
+      text-align: left
+      white-space: pre-wrap
+      top: 32px
+
+    .duration
+      position: absolute
+      bottom: 42px
+      right: 2px
+      z-index: 1
+      background-color: black
+      color: white
+      padding: 0px 2px
+      opacity: 0.8
+      border-radius: 2px
+      font-size: 13px
+
+  .load-videos
+    display: table
+    width: 300pt
+    height: 50pt
+    text-align: center
+    font-size: 20pt
+    margin: auto
+    display: block
+    border: none
+    background-color: aquamarine
+
+  .clear-filter
+    transform: scale(0.7)
+    top: 3%
+    right: 6%
+    width: 32px
+    height: 32px
+    position: absolute
+
+  .video-view-page
+    margin: 10px
+    text-align: center
+    overflow-y: scroll
+    overflow-x: hidden
+    height: 93%
+
+    .video-content
+      display: inline-block
+      margin: auto
+
+      .video-title
+        text-align: center
+        font-weight: 600
+
+      .video-iframe
+        width: 761px
+        height: 434px
+        border: 5px solid #8a8a8a
+        border-radius: 4px
+        box-shadow: rgb(150, 150, 150) 5px 5px 10px
+        display: block
+        margin: auto
+
+      .video-info
+        margin-top: 21px
+        text-align: left
+        display: inline-block
+        font-size: 15px
+
+        .video-author
+          display: inline-block
+          float: left
+
+        .video-views-count
+          display: inline-block
+          float: right
+
+        .video-description
+          clear: both
+
+          span:first-child
+            font-weight: bolder
+
+          span:nth-child(2)
+            white-space: pre-wrap
+            display: block
+            text-align: left
+            width: 704px
+
+    .cancel-button
+      float: right
+      margin-bottom: 20px
+      margin-right: 20px
+      width: 113px
+      height: 33px

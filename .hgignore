@@ -1,0 +1,10 @@
+syntax: glob
+**/bin/**
+**/obj/**
+**/csx/**
+**/.*
+**/*.cache
+**/*.user
+**/packages/**
+**/test/**
+**/node_modules/**
