@@ -7,4 +7,4 @@ syntax: glob
 **/*.user
 **/packages/**
 **/test/**
-**/_node_modules/**
+**/node_modules/**
