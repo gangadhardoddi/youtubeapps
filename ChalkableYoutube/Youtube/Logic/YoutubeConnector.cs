@@ -35,6 +35,7 @@ namespace Youtube.Logic
                 searchListRequest.Q = videoQuery;
             searchListRequest.MaxResults = maxResult;
             searchListRequest.Type = "video";
+            searchListRequest.SafeSearch = SearchResource.ListRequest.SafeSearchEnum.Strict;
 
             // Call the search.list method to retrieve results matching the specified query term.
             var searchListResponse = searchListRequest.Execute();          
@@ -47,7 +48,7 @@ namespace Youtube.Logic
             return new YouTubeService(new BaseClientService.Initializer()
             {
                 ApiKey = GooglePublicAPIKey,
-                ApplicationName = this.GetType().ToString()
+                ApplicationName = GetType().ToString()
             });
         }
 
