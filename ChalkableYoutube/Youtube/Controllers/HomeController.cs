@@ -40,7 +40,13 @@ namespace Youtube.Controllers
                     return RedirectToAction("Edit", "Youtube", actionParams);
 
                 case Settings.MY_VIEW_MODE:
-                    return RedirectToAction("All", "Youtube");
+                    if(standards?.ToList().Count > 0)
+                    {
+                        actionParams.Add("standardIds", standards.Select(x => x.StandardId).JoinString(","));
+                        return RedirectToAction("Edit", "Youtube", actionParams);
+                    }
+                    else
+                        return RedirectToAction("All", "Youtube");
 
                 case Settings.VIEW_MODE:
                     actionParams.Add("id", contentId);
