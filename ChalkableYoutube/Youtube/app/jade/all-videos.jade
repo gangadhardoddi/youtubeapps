@@ -6,7 +6,7 @@ mixin RenderVideos(tpl, videos)
 +PaginatedForm("searchVideosForm", 'search-videos-form', data)
     +VideosFilters()
     +ActionBar()
-        if !data.isAllViewOnly() && !data.isAdmin()
+        if data.isRecommendedEnabled()
             +ActionLinkButton("javascript:", "Recommended").all-action
         .pressed All
     .videos-container
