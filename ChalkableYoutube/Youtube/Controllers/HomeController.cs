@@ -33,28 +33,28 @@ namespace Youtube.Controllers
                     if (!string.IsNullOrEmpty(contentId))
                     {
                         actionParams.Add("id", contentId);
-                        return RedirectToAction("View", "Youtube", actionParams);
+                        return RedirectToAction("ViewVideo", "Youtube", actionParams);
                     }
 
                     actionParams.Add("standardIds", standards.Select(x => x.StandardId).JoinString(","));
-                    return RedirectToAction("Edit", "Youtube", actionParams);
+                    return RedirectToAction("RecommendedVideos", "Youtube", actionParams);
 
                 case Settings.MY_VIEW_MODE:
                     if(standards?.ToList().Count > 0)
                     {
                         actionParams.Add("standardIds", standards.Select(x => x.StandardId).JoinString(","));
-                        return RedirectToAction("Edit", "Youtube", actionParams);
+                        return RedirectToAction("RecommendedVideos", "Youtube", actionParams);
                     }
                     else
-                        return RedirectToAction("All", "Youtube");
+                        return RedirectToAction("AllVideos", "Youtube");
 
                 case Settings.VIEW_MODE:
                     actionParams.Add("id", contentId);
-                    return RedirectToAction("View", "Youtube", actionParams);
+                    return RedirectToAction("ViewVideo", "Youtube", actionParams);
 
                 case Settings.GRADING_VIEW_MODE:
                     actionParams.Add("id", (string) null);
-                    return RedirectToAction("View", "Youtube", actionParams);
+                    return RedirectToAction("ViewVideo", "Youtube", actionParams);
 
                 default:
                     return View("NotSupported");

@@ -18,7 +18,7 @@ export default class VideoView extends BaseView{
     bindEvents_(){
         super.bindEvents_();
         this.dom.on('click', '.cancel-button', event => {
-            this.controller.recommendedVideosAction();
+            this.controller.allVideosAction();
         });
     }
 }
