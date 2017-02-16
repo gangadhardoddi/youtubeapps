@@ -99,7 +99,6 @@
 	    _createClass(YoutubeApp, [{
 	        key: 'isAppReady',
 	        value: function isAppReady(data, callback, videosController) {
-	            console.log(videosController.view instanceof _VideoView2.default);
 
 	            if (videosController.view instanceof _VideoView2.default) {
 	                _services2.default.VideoService.attach(videosController.view.model.video.Id, _GlobalVariables.GlobalVariables.ANNOUNCEMENT_APPLICATION_ID).then(function (res) {
@@ -110,8 +109,8 @@
 	    }, {
 	        key: 'resolveAndRunAction',
 	        value: function resolveAndRunAction() {
-	            var splitedPath = window.location.pathname.split('/');
-	            var actionName = splitedPath[splitedPath.length - 1];
+	            var splitedPath = window.location.pathname.split('/').filter(Boolean);
+	            var actionName = splitedPath[1]; // Action name in MVC
 	            var methodName = actionName[0].toLowerCase() + actionName.slice(1) + "Action";
 
 	            this.videosController[methodName]();
