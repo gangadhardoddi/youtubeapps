@@ -12,30 +12,17 @@ namespace Youtube.Controllers
 {
     public class YoutubeController : BaseController
     {
-        public ActionResult Edit(string standardIds, int announcementApplicationId)
+        public ActionResult RecommendedVideos(string standardIds, int? announcementApplicationId)
         {
             var standardVideos = GetRecommended(standardIds);
             standardVideos = standardVideos.Where(x => x.Videos != null && x.Videos.Count > 0).ToList();
-            var res = new StartupViewData
-            {
-                AnnouncementApplicationId = announcementApplicationId,
-                StandardVideosJson = JsonConvert.SerializeObject(standardVideos),
-                Mode = Settings.EDIT_MODE,
-                Role = CurrentUser.Role.LoweredName
-            };
+            var res = StartupViewData.Create(standardVideos, null, announcementApplicationId, CurrentUser.Role);
             return View("Index", res);
         }
 
-        public ActionResult All()
+        public ActionResult AllVideos()
         {
-            var model = new StartupViewData
-            {
-                AnnouncementApplicationId = 0,
-                Mode = Settings.MY_VIEW_MODE,
-                VideoId = null,
-                StandardVideosJson = "[]",
-                Role = CurrentUser.Role.LoweredName
-            };
+            var model = StartupViewData.Create(null, null, null, CurrentUser.Role);
 
             return View("Index", model);
         }
@@ -65,7 +52,7 @@ namespace Youtube.Controllers
             return ChlkJson(true);
         }
 
-        public ActionResult View(string id, int announcementApplicationId)
+        public ActionResult ViewVideo(string id, int announcementApplicationId)
         {
             if (string.IsNullOrEmpty(id))
                 id = new Storage(ChalkableAuthorization.Configuration.ConnectionString).Get(CurrentUser.DistrictId, announcementApplicationId);
@@ -73,14 +60,7 @@ namespace Youtube.Controllers
             if(string.IsNullOrEmpty(id))
                 return View("Error");
 
-            var res = new StartupViewData
-            {
-                AnnouncementApplicationId = announcementApplicationId,
-                StandardVideosJson = "[]",
-                Mode = Settings.VIEW_MODE,
-                Role = CurrentUser.Role.LoweredName,
-                VideoId = id
-            };
+            var res = StartupViewData.Create(null, id, announcementApplicationId, CurrentUser.Role);
 
             return View("Index", res);
         }
