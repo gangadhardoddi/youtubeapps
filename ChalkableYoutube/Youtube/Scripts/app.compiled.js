@@ -52,11 +52,17 @@
 
 	var _youtube2 = _interopRequireDefault(_youtube);
 
-	var _services = __webpack_require__(6);
+	var _GlobalVariables = __webpack_require__(6);
+
+	var _services = __webpack_require__(7);
 
 	var _services2 = _interopRequireDefault(_services);
 
-	var _RecommendedVideosView = __webpack_require__(7);
+	var _controls = __webpack_require__(8);
+
+	var _controls2 = _interopRequireDefault(_controls);
+
+	var _RecommendedVideosView = __webpack_require__(9);
 
 	var _RecommendedVideosView2 = _interopRequireDefault(_RecommendedVideosView);
 
@@ -68,127 +74,60 @@
 
 	var _VideoView2 = _interopRequireDefault(_VideoView);
 
-	var _RoleEnum = __webpack_require__(15);
+	var _VideosController = __webpack_require__(25);
 
-	var _ModeEnum = __webpack_require__(16);
-
-	var _controls = __webpack_require__(25);
-
-	var _controls2 = _interopRequireDefault(_controls);
+	var _VideosController2 = _interopRequireDefault(_VideosController);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-	var GlobalVariables = {
-	    CHLK_API: window['CHLK_API'] || null,
-	    VIDEO_ID: window['VIDEO_ID'] || null,
-	    STANDARD_VIDEOS: window['STANDARD_VIDEOS'] || [],
-	    ANNOUNCEMENT_APPLICATION_ID: window['ANNOUNCEMENT_APPLICATION_ID'] || null,
-	    ROLE: window['ROLE'] || null,
-	    MODE: window['MODE'] || null
-	};
+	var YoutubeApp = function () {
+	    function YoutubeApp() {
+	        var _this = this;
 
-	var VideosController = function () {
-	    function VideosController() {
-	        _classCallCheck(this, VideosController);
+	        _classCallCheck(this, YoutubeApp);
 
-	        this.view = null;
+	        var vc = new _VideosController2.default();
+	        this.videosController = vc;
+	        this.controls = _controls2.default.Create();
+	        _GlobalVariables.GlobalVariables.CHLK_API.onBeforeClose(function (data, callback) {
+	            return _this.isAppReady(data, callback, vc);
+	        });
 	    }
 
-	    _createClass(VideosController, [{
-	        key: 'pushView_',
-	        value: function pushView_(viewClass, completer) {
-	            this.view = new viewClass(this);
-	            this.view.show();
-	            this.view.refreshAsync(completer);
-	        }
-	    }, {
-	        key: 'updateView_',
-	        value: function updateView_(completer, message) {
-	            this.view.partialRefreshAsync(completer, message);
-	        }
-	    }, {
-	        key: 'searchAction',
-	        value: function searchAction(searchQuery) {
-	            var res = _services2.default.VideoService.search(searchQuery).then(function (videos) {
-	                return {
-	                    videos: videos,
-	                    role: GlobalVariables.ROLE,
-	                    mode: GlobalVariables.MODE
-	                };
-	            });
-	            this.updateView_(res, 'load-videos');
-	        }
-	    }, {
-	        key: 'recommendedVideosAction',
-	        value: function recommendedVideosAction() {
-	            var model = {
-	                standardVideos: GlobalVariables.STANDARD_VIDEOS,
-	                role: GlobalVariables.ROLE,
-	                mode: GlobalVariables.MODE
-	            };
-	            var res = new Promise(function (resolve, reject) {
-	                return resolve(model);
-	            });
-	            this.pushView_(_RecommendedVideosView2.default, res);
-	        }
-	    }, {
-	        key: 'allVideosAction',
-	        value: function allVideosAction() {
-	            var res = _services2.default.VideoService.search(null).then(function (videos) {
-	                return {
-	                    videos: videos,
-	                    role: GlobalVariables.ROLE,
-	                    mode: GlobalVariables.MODE
-	                };
-	            });
-	            this.pushView_(_AllVideosView2.default, res);
-	        }
-	    }, {
-	        key: 'viewVideoAction',
-	        value: function viewVideoAction(id) {
-	            var res = _services2.default.VideoService.getVideoById(id).then(function (data) {
-	                return {
-	                    video: data,
-	                    role: GlobalVariables.ROLE,
-	                    mode: GlobalVariables.MODE
-	                };
-	            });
+	    _createClass(YoutubeApp, [{
+	        key: 'isAppReady',
+	        value: function isAppReady(data, callback, videosController) {
+	            console.log(videosController.view instanceof _VideoView2.default);
 
-	            this.pushView_(_VideoView2.default, res);
+	            if (videosController.view instanceof _VideoView2.default) {
+	                _services2.default.VideoService.attach(videosController.view.model.video.Id, _GlobalVariables.GlobalVariables.ANNOUNCEMENT_APPLICATION_ID).then(function (res) {
+	                    return callback(!!res);
+	                });
+	            } else callback(false);
+	        }
+	    }, {
+	        key: 'resolveAndRunAction',
+	        value: function resolveAndRunAction() {
+	            var splitedPath = window.location.pathname.split('/');
+	            var actionName = splitedPath[splitedPath.length - 1];
+	            var methodName = actionName[0].toLowerCase() + actionName.slice(1) + "Action";
+
+	            this.videosController[methodName]();
+	        }
+	    }], [{
+	        key: 'run',
+	        value: function run() {
+	            var app = new YoutubeApp();
+	            app.resolveAndRunAction();
 	        }
 	    }]);
 
-	    return VideosController;
+	    return YoutubeApp;
 	}();
 
-	$(function () {
-	    _controls2.default.Create();
-	    var videoController = new VideosController();
-
-	    function isAppReady(data, callback) {
-	        if (videoController.view.viewName === 'VideoView') {
-	            _services2.default.VideoService.attach(videoController.view.model.video.Id, GlobalVariables.ANNOUNCEMENT_APPLICATION_ID).then(function (res) {
-	                return callback(!!res);
-	            });
-	        } else callback(false);
-	    }
-
-	    GlobalVariables.CHLK_API.onBeforeClose(isAppReady);
-
-	    switch (GlobalVariables.MODE) {
-	        case _ModeEnum.ModeEnum.EDIT:
-	            if (GlobalVariables.ROLE == _RoleEnum.RoleEnum.ADMIN) videoController.allVideosAction();else videoController.recommendedVideosAction();
-	            break;
-	        case _ModeEnum.ModeEnum.VIEW:case _ModeEnum.ModeEnum.GRADING_VIEW:
-	            videoController.viewVideoAction(GlobalVariables.VIDEO_ID);
-	            break;
-	        default:
-	            videoController.allVideosAction();
-	            break;
-	    }
-	});
+	$(YoutubeApp.run);
 
 /***/ },
 /* 1 */,
@@ -548,6 +487,24 @@
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
+	var GlobalVariables = exports.GlobalVariables = {
+	    CHLK_API: window['CHLK_API'] || null,
+	    VIDEO_ID: window['VIDEO_ID'] || null,
+	    STANDARD_VIDEOS: window['STANDARD_VIDEOS'] || [],
+	    ANNOUNCEMENT_APPLICATION_ID: window['ANNOUNCEMENT_APPLICATION_ID'] || null,
+	    IS_RECOMMENDED_ENABLED: window['IS_RECOMMENDED_ENABLED'] || null,
+	    ONLY_VIDEO_VIEW: window['ONLY_VIDEO_VIEW'] || null
+	};
+
+/***/ },
+/* 7 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -611,7 +568,134 @@
 	exports.default = { VideoService: VideoService };
 
 /***/ },
-/* 7 */
+/* 8 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var BaseControl = function () {
+	    function BaseControl() {
+	        _classCallCheck(this, BaseControl);
+
+	        this.bindEvents_();
+	    }
+
+	    _createClass(BaseControl, [{
+	        key: 'bindEvents_',
+	        value: function bindEvents_() {}
+	    }, {
+	        key: 'dom',
+	        get: function get() {
+	            return $('body');
+	        }
+	    }]);
+
+	    return BaseControl;
+	}();
+
+	var ENTER_KEY = 13;
+
+	var SearchControl = exports.SearchControl = function (_BaseControl) {
+	    _inherits(SearchControl, _BaseControl);
+
+	    function SearchControl() {
+	        _classCallCheck(this, SearchControl);
+
+	        return _possibleConstructorReturn(this, (SearchControl.__proto__ || Object.getPrototypeOf(SearchControl)).apply(this, arguments));
+	    }
+
+	    _createClass(SearchControl, [{
+	        key: 'bindEvents_',
+	        value: function bindEvents_() {
+	            _get(SearchControl.prototype.__proto__ || Object.getPrototypeOf(SearchControl.prototype), 'bindEvents_', this).call(this);
+	            this.dom.on('input', 'input', function (event) {
+	                var target = $(event.target);
+	                if ($(event.target).val().length == 0) target.parent().find('.clear-filter').addClass('hidden');else target.parent().find('.clear-filter').removeClass('hidden');
+	            }).on('keypress', 'input', function (event) {
+	                var keyCode = event.which || event.keyCode; //depends on browser
+	                if (keyCode == ENTER_KEY) event.preventDefault();
+	            }).on('click', '.clear-filter', function (event) {
+	                var node = $(event.target).parent().find('input');
+	                node.val('');
+	                node.trigger('input');
+	            });
+	        }
+	    }]);
+
+	    return SearchControl;
+	}(BaseControl);
+
+	var CloseOpenControl = exports.CloseOpenControl = function (_BaseControl2) {
+	    _inherits(CloseOpenControl, _BaseControl2);
+
+	    function CloseOpenControl() {
+	        _classCallCheck(this, CloseOpenControl);
+
+	        return _possibleConstructorReturn(this, (CloseOpenControl.__proto__ || Object.getPrototypeOf(CloseOpenControl)).apply(this, arguments));
+	    }
+
+	    _createClass(CloseOpenControl, [{
+	        key: 'bindEvents_',
+	        value: function bindEvents_() {
+	            _get(CloseOpenControl.prototype.__proto__ || Object.getPrototypeOf(CloseOpenControl.prototype), 'bindEvents_', this).call(this);
+	            this.dom.on('click', '.co-open, .co-close', function (event) {
+	                var timeout;
+	                var node = $(event.target).parents('.close-open-control');
+	                var closeOpenBlock = node.find('.close-open-block');
+	                timeout && clearTimeout(timeout);
+	                if (node.hasClass('co-opened')) {
+	                    closeOpenBlock.css('height', 0);
+	                    node.removeClass('co-opened');
+	                } else {
+	                    closeOpenBlock.css('height', 'auto');
+	                    node.addClass('co-opened');
+	                }
+	                timeout = setTimeout(function () {
+	                    return node.addClass('co-finished');
+	                }, 200);
+	            });
+	        }
+	    }]);
+
+	    return CloseOpenControl;
+	}(BaseControl);
+
+	var YoutubeControls = function () {
+	    function YoutubeControls() {
+	        _classCallCheck(this, YoutubeControls);
+	    }
+
+	    _createClass(YoutubeControls, null, [{
+	        key: 'Create',
+	        value: function Create() {
+	            return {
+	                SearchControl: new SearchControl(),
+	                CloseOpenControl: new CloseOpenControl()
+	            };
+	        }
+	    }]);
+
+	    return YoutubeControls;
+	}();
+
+	exports.default = YoutubeControls;
+
+/***/ },
+/* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -624,7 +708,7 @@
 
 	var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
-	var _BaseVideosView2 = __webpack_require__(8);
+	var _BaseVideosView2 = __webpack_require__(10);
 
 	var _BaseVideosView3 = _interopRequireDefault(_BaseVideosView2);
 
@@ -697,7 +781,7 @@
 	exports.default = RecommendedVideosView;
 
 /***/ },
-/* 8 */
+/* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -710,11 +794,11 @@
 
 	var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
-	var _BaseView2 = __webpack_require__(9);
+	var _BaseView2 = __webpack_require__(11);
 
 	var _BaseView3 = _interopRequireDefault(_BaseView2);
 
-	var _VideosTpl = __webpack_require__(10);
+	var _VideosTpl = __webpack_require__(12);
 
 	var _VideosTpl2 = _interopRequireDefault(_VideosTpl);
 
@@ -797,7 +881,7 @@
 	exports.default = BaseVideosView;
 
 /***/ },
-/* 9 */
+/* 11 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -908,7 +992,7 @@
 	exports.default = BaseView;
 
 /***/ },
-/* 10 */
+/* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -919,11 +1003,11 @@
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _videos = __webpack_require__(11);
+	var _videos = __webpack_require__(13);
 
 	var _videos2 = _interopRequireDefault(_videos);
 
-	var _BaseTpl2 = __webpack_require__(14);
+	var _BaseTpl2 = __webpack_require__(16);
 
 	var _BaseTpl3 = _interopRequireDefault(_BaseTpl2);
 
@@ -965,12 +1049,12 @@
 	exports.default = VideosTpl;
 
 /***/ },
-/* 11 */
+/* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
-	var jade = __webpack_require__(12);
+	var jade = __webpack_require__(14);
 
 	module.exports = function template(locals) {
 	  var buf = [];
@@ -1029,7 +1113,7 @@
 	};
 
 /***/ },
-/* 12 */
+/* 14 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1249,7 +1333,7 @@
 	    throw err;
 	  }
 	  try {
-	    str = str || __webpack_require__(13).readFileSync(filename, 'utf8')
+	    str = str || __webpack_require__(15).readFileSync(filename, 'utf8')
 	  } catch (ex) {
 	    rethrow(err, null, lineno)
 	  }
@@ -1281,14 +1365,14 @@
 
 
 /***/ },
-/* 13 */
+/* 15 */
 /***/ function(module, exports) {
 
 	/* (ignored) */
 
 /***/ },
-/* 14 */
-/***/ function(module, exports, __webpack_require__) {
+/* 16 */
+/***/ function(module, exports) {
 
 	'use strict';
 
@@ -1298,18 +1382,14 @@
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _RoleEnum = __webpack_require__(15);
-
-	var _ModeEnum = __webpack_require__(16);
-
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	var BaseTpl = function () {
 	    function BaseTpl(data) {
 	        _classCallCheck(this, BaseTpl);
 
-	        this.role = data.role;
-	        this.mode = data.mode;
+	        this.isRecommEnabled = data.isRecommendedEnabled;
+	        this.onlyVideoView = data.isOnlyVideoView;
 	    }
 
 	    _createClass(BaseTpl, [{
@@ -1328,33 +1408,14 @@
 	            }
 	        }
 	    }, {
-	        key: 'isTeacherOrAdmin',
-	        value: function isTeacherOrAdmin() {
-	            if (!this.role) return false;
-
-	            return this.role == _RoleEnum.RoleEnum.TEACHER || this.role == _RoleEnum.RoleEnum.ADMIN;
+	        key: 'isRecommendedEnabled',
+	        value: function isRecommendedEnabled() {
+	            return this.isRecommEnabled;
 	        }
 	    }, {
-	        key: 'isAdmin',
-	        value: function isAdmin() {
-	            return this.role == _RoleEnum.RoleEnum.ADMIN;
-	        }
-	    }, {
-	        key: 'isStudent',
-	        value: function isStudent() {
-	            if (!this.role) return false;
-
-	            return this.role == _RoleEnum.RoleEnum.STUDENT;
-	        }
-	    }, {
-	        key: 'isAllViewOnly',
-	        value: function isAllViewOnly() {
-	            return this.mode == _ModeEnum.ModeEnum.MY_VIEW;
-	        }
-	    }, {
-	        key: 'isViewMode',
-	        value: function isViewMode() {
-	            return this.mode == _ModeEnum.ModeEnum.VIEW;
+	        key: 'isVideoViewOnly',
+	        value: function isVideoViewOnly() {
+	            return this.onlyVideoView;
 	        }
 	    }, {
 	        key: 'jade',
@@ -1367,37 +1428,6 @@
 	}();
 
 	exports.default = BaseTpl;
-
-/***/ },
-/* 15 */
-/***/ function(module, exports) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	var RoleEnum = exports.RoleEnum = {
-	    TEACHER: "teacher",
-	    STUDENT: "student",
-	    ADMIN: "districtadmin"
-	};
-
-/***/ },
-/* 16 */
-/***/ function(module, exports) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	var ModeEnum = exports.ModeEnum = {
-	    EDIT: "edit",
-	    VIEW: "view",
-	    MY_VIEW: "myview",
-	    GRADING_VIEW: "gradingview"
-	};
 
 /***/ },
 /* 17 */
@@ -1415,11 +1445,11 @@
 
 	var _standardVideos2 = _interopRequireDefault(_standardVideos);
 
-	var _BaseTpl2 = __webpack_require__(14);
+	var _BaseTpl2 = __webpack_require__(16);
 
 	var _BaseTpl3 = _interopRequireDefault(_BaseTpl2);
 
-	var _VideosTpl = __webpack_require__(10);
+	var _VideosTpl = __webpack_require__(12);
 
 	var _VideosTpl2 = _interopRequireDefault(_VideosTpl);
 
@@ -1474,7 +1504,7 @@
 
 	"use strict";
 
-	var jade = __webpack_require__(12);
+	var jade = __webpack_require__(14);
 
 	module.exports = function template(locals) {
 	  var buf = [];
@@ -1597,7 +1627,7 @@
 
 	var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
-	var _BaseVideosView2 = __webpack_require__(8);
+	var _BaseVideosView2 = __webpack_require__(10);
 
 	var _BaseVideosView3 = _interopRequireDefault(_BaseVideosView2);
 
@@ -1685,11 +1715,11 @@
 
 	var _allVideos2 = _interopRequireDefault(_allVideos);
 
-	var _BaseTpl2 = __webpack_require__(14);
+	var _BaseTpl2 = __webpack_require__(16);
 
 	var _BaseTpl3 = _interopRequireDefault(_BaseTpl2);
 
-	var _VideosTpl = __webpack_require__(10);
+	var _VideosTpl = __webpack_require__(12);
 
 	var _VideosTpl2 = _interopRequireDefault(_VideosTpl);
 
@@ -1744,7 +1774,7 @@
 
 	"use strict";
 
-	var jade = __webpack_require__(12);
+	var jade = __webpack_require__(14);
 
 	module.exports = function template(locals) {
 	  var buf = [];
@@ -1796,7 +1826,7 @@
 	        jade_mixins["VideosFilters"]();
 	        jade_mixins["ActionBar"].call({
 	          block: function block() {
-	            if (!data.isAllViewOnly() && !data.isAdmin()) {
+	            if (data.isRecommendedEnabled()) {
 	              jade_mixins["ActionLinkButton"].call({
 	                attributes: { "class": "all-action" }
 	              }, "javascript:", "Recommended");
@@ -1826,7 +1856,7 @@
 
 	var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
-	var _BaseView2 = __webpack_require__(9);
+	var _BaseView2 = __webpack_require__(11);
 
 	var _BaseView3 = _interopRequireDefault(_BaseView2);
 
@@ -1861,7 +1891,7 @@
 
 	            _get(VideoView.prototype.__proto__ || Object.getPrototypeOf(VideoView.prototype), 'bindEvents_', this).call(this);
 	            this.dom.on('click', '.cancel-button', function (event) {
-	                _this2.controller.recommendedVideosAction();
+	                _this2.controller.allVideosAction();
 	            });
 	        }
 	    }, {
@@ -1897,7 +1927,7 @@
 
 	var _videoView2 = _interopRequireDefault(_videoView);
 
-	var _BaseTpl2 = __webpack_require__(14);
+	var _BaseTpl2 = __webpack_require__(16);
 
 	var _BaseTpl3 = _interopRequireDefault(_BaseTpl2);
 
@@ -1944,7 +1974,7 @@
 
 	"use strict";
 
-	var jade = __webpack_require__(12);
+	var jade = __webpack_require__(14);
 
 	module.exports = function template(locals) {
 	  var buf = [];
@@ -1953,7 +1983,7 @@
 	  ;var locals_for_with = locals || {};(function (data) {
 	    var video = data.video;
 	    buf.push("<div class=\"video-content\"><h2 class=\"video-title\">" + jade.escape(null == (jade_interp = video.Title) ? "" : jade_interp) + "</h2><iframe" + jade.attr("src", video.Url, true, true) + " allowfullscreen class=\"video-iframe\"></iframe><div class=\"video-info\"><div class=\"video-author\"><b>" + jade.escape(null == (jade_interp = "Contributed by") ? "" : jade_interp) + "</b></div>" + jade.escape(null == (jade_interp = "_" + video.Author) ? "" : jade_interp) + "<div class=\"video-views-count\"><b>" + jade.escape(null == (jade_interp = video.Views + " views") ? "" : jade_interp) + "</b></div><div class=\"video-description\"><span>" + jade.escape(null == (jade_interp = 'Description:') ? "" : jade_interp) + "</span><span>" + jade.escape(null == (jade_interp = video.Description) ? "" : jade_interp) + "</span></div></div></div><div class=\"video-view-footer\">");
-	    if (data.isTeacherOrAdmin() && !data.isViewMode()) {
+	    if (!data.isVideoViewOnly()) {
 	      buf.push("<button name=\"Cancel\" class=\"cancel-button\">" + jade.escape(null == (jade_interp = "Cancel") ? "" : jade_interp) + "</button>");
 	    }
 	    buf.push("</div>");
@@ -1962,7 +1992,7 @@
 
 /***/ },
 /* 25 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
@@ -1970,122 +2000,113 @@
 	    value: true
 	});
 
-	var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
-
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	var _youtube = __webpack_require__(2);
 
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	var _youtube2 = _interopRequireDefault(_youtube);
+
+	var _GlobalVariables = __webpack_require__(6);
+
+	var _services = __webpack_require__(7);
+
+	var _services2 = _interopRequireDefault(_services);
+
+	var _RecommendedVideosView = __webpack_require__(9);
+
+	var _RecommendedVideosView2 = _interopRequireDefault(_RecommendedVideosView);
+
+	var _AllVideosView = __webpack_require__(19);
+
+	var _AllVideosView2 = _interopRequireDefault(_AllVideosView);
+
+	var _VideoView = __webpack_require__(22);
+
+	var _VideoView2 = _interopRequireDefault(_VideoView);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-	var BaseControl = function () {
-	    function BaseControl() {
-	        _classCallCheck(this, BaseControl);
+	var VideosController = function () {
+	    function VideosController() {
+	        _classCallCheck(this, VideosController);
 
-	        this.bindEvents_();
+	        this.view = null;
 	    }
 
-	    _createClass(BaseControl, [{
-	        key: 'bindEvents_',
-	        value: function bindEvents_() {}
+	    _createClass(VideosController, [{
+	        key: 'pushView_',
+	        value: function pushView_(viewClass, completer) {
+	            this.view = new viewClass(this);
+	            this.view.show();
+	            this.view.refreshAsync(completer);
+	        }
 	    }, {
-	        key: 'dom',
-	        get: function get() {
-	            return $('body');
+	        key: 'updateView_',
+	        value: function updateView_(completer, message) {
+	            this.view.partialRefreshAsync(completer, message);
 	        }
-	    }]);
-
-	    return BaseControl;
-	}();
-
-	var ENTER_KEY = 13;
-
-	var SearchControl = exports.SearchControl = function (_BaseControl) {
-	    _inherits(SearchControl, _BaseControl);
-
-	    function SearchControl() {
-	        _classCallCheck(this, SearchControl);
-
-	        return _possibleConstructorReturn(this, (SearchControl.__proto__ || Object.getPrototypeOf(SearchControl)).apply(this, arguments));
-	    }
-
-	    _createClass(SearchControl, [{
-	        key: 'bindEvents_',
-	        value: function bindEvents_() {
-	            _get(SearchControl.prototype.__proto__ || Object.getPrototypeOf(SearchControl.prototype), 'bindEvents_', this).call(this);
-	            this.dom.on('input', 'input', function (event) {
-	                var target = $(event.target);
-	                if ($(event.target).val().length == 0) target.parent().find('.clear-filter').addClass('hidden');else target.parent().find('.clear-filter').removeClass('hidden');
-	            }).on('keypress', 'input', function (event) {
-	                var keyCode = event.which || event.keyCode; //depends on browser
-	                if (keyCode == ENTER_KEY) event.preventDefault();
-	            }).on('click', '.clear-filter', function (event) {
-	                var node = $(event.target).parent().find('input');
-	                node.val('');
-	                node.trigger('input');
+	    }, {
+	        key: 'searchAction',
+	        value: function searchAction(searchQuery) {
+	            var res = _services2.default.VideoService.search(searchQuery).then(function (videos) {
+	                return {
+	                    videos: videos,
+	                    isRecommendedEnabled: _GlobalVariables.GlobalVariables.IS_RECOMMENDED_ENABLED,
+	                    isOnlyVideoView: _GlobalVariables.GlobalVariables.ONLY_VIDEO_VIEW
+	                };
 	            });
+	            this.updateView_(res, 'load-videos');
 	        }
-	    }]);
-
-	    return SearchControl;
-	}(BaseControl);
-
-	var CloseOpenControl = exports.CloseOpenControl = function (_BaseControl2) {
-	    _inherits(CloseOpenControl, _BaseControl2);
-
-	    function CloseOpenControl() {
-	        _classCallCheck(this, CloseOpenControl);
-
-	        return _possibleConstructorReturn(this, (CloseOpenControl.__proto__ || Object.getPrototypeOf(CloseOpenControl)).apply(this, arguments));
-	    }
-
-	    _createClass(CloseOpenControl, [{
-	        key: 'bindEvents_',
-	        value: function bindEvents_() {
-	            _get(CloseOpenControl.prototype.__proto__ || Object.getPrototypeOf(CloseOpenControl.prototype), 'bindEvents_', this).call(this);
-	            this.dom.on('click', '.co-open, .co-close', function (event) {
-	                var timeout;
-	                var node = $(event.target).parents('.close-open-control');
-	                var closeOpenBlock = node.find('.close-open-block');
-	                timeout && clearTimeout(timeout);
-	                if (node.hasClass('co-opened')) {
-	                    closeOpenBlock.css('height', 0);
-	                    node.removeClass('co-opened');
-	                } else {
-	                    closeOpenBlock.css('height', 'auto');
-	                    node.addClass('co-opened');
-	                }
-	                timeout = setTimeout(function () {
-	                    return node.addClass('co-finished');
-	                }, 200);
-	            });
-	        }
-	    }]);
-
-	    return CloseOpenControl;
-	}(BaseControl);
-
-	var YoutubeControls = function () {
-	    function YoutubeControls() {
-	        _classCallCheck(this, YoutubeControls);
-	    }
-
-	    _createClass(YoutubeControls, null, [{
-	        key: 'Create',
-	        value: function Create() {
-	            return {
-	                SearchControl: new SearchControl(),
-	                CloseOpenControl: new CloseOpenControl()
+	    }, {
+	        key: 'recommendedVideosAction',
+	        value: function recommendedVideosAction() {
+	            var model = {
+	                standardVideos: _GlobalVariables.GlobalVariables.STANDARD_VIDEOS,
+	                isRecommendedEnabled: _GlobalVariables.GlobalVariables.IS_RECOMMENDED_ENABLED,
+	                isOnlyVideoView: _GlobalVariables.GlobalVariables.ONLY_VIDEO_VIEW
 	            };
+	            var res = new Promise(function (resolve, reject) {
+	                return resolve(model);
+	            });
+	            this.pushView_(_RecommendedVideosView2.default, res);
+	        }
+	    }, {
+	        key: 'allVideosAction',
+	        value: function allVideosAction() {
+	            var res = _services2.default.VideoService.search(null).then(function (videos) {
+	                return {
+	                    videos: videos,
+	                    isRecommendedEnabled: _GlobalVariables.GlobalVariables.IS_RECOMMENDED_ENABLED,
+	                    isOnlyVideoView: _GlobalVariables.GlobalVariables.ONLY_VIDEO_VIEW
+	                };
+	            });
+	            this.pushView_(_AllVideosView2.default, res);
+	        }
+	    }, {
+	        key: 'viewVideoAction',
+	        value: function viewVideoAction(id) {
+	            if (!id) {
+	                id = _GlobalVariables.GlobalVariables.VIDEO_ID;
+	            }
+
+	            var res = _services2.default.VideoService.getVideoById(id).then(function (data) {
+	                return {
+	                    video: data,
+	                    isRecommendedEnabled: _GlobalVariables.GlobalVariables.IS_RECOMMENDED_ENABLED,
+	                    isOnlyVideoView: _GlobalVariables.GlobalVariables.ONLY_VIDEO_VIEW
+	                };
+	            });
+
+	            this.pushView_(_VideoView2.default, res);
 	        }
 	    }]);
 
-	    return YoutubeControls;
+	    return VideosController;
 	}();
 
-	exports.default = YoutubeControls;
+	exports.default = VideosController;
 
 /***/ }
 /******/ ]);

@@ -8,10 +8,10 @@
 {
     <script type="text/javascript">
         //--- initialze data for filtering
-        var MODE = "@Html.Raw(Model.Mode)" ;
-        var ROLE = "@Html.Raw(Model.Role)";
+        var ONLY_VIDEO_VIEW = @Html.Raw(Model.OnlyViewVideo).ToString().ToLower();
+        var IS_RECOMMENDED_ENABLED = @Html.Raw(Model.IsRecommendedEnabled).ToString().ToLower();
         var VIDEO_ID = "@Html.Raw(Model.VideoId)";
-        var STANDARD_VIDEOS = @Html.Raw(Model.StandardVideosJson);
+        var STANDARD_VIDEOS = @Html.Raw(Model.StandardVideosJson ?? "[]");
         var ANNOUNCEMENT_APPLICATION_ID = @Html.Raw(Model.AnnouncementApplicationId ?? 0);
     </script>
 }
