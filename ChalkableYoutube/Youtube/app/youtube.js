@@ -28,8 +28,8 @@ class YoutubeApp {
     }
 
     resolveAndRunAction(){
-        var splitedPath = window.location.pathname.split('/');
-        var actionName = splitedPath[splitedPath.length - 1];
+        var splitedPath = window.location.pathname.split('/').filter(Boolean);
+        var actionName = splitedPath[1]; // Action name in MVC
         var methodName = actionName[0].toLowerCase() + actionName.slice(1) + "Action";
 
         this.videosController[methodName]();
