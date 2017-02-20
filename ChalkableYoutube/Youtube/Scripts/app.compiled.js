@@ -109,11 +109,10 @@
 	    }, {
 	        key: 'resolveAndRunAction',
 	        value: function resolveAndRunAction() {
-	            var splitedPath = window.location.pathname.split('/').filter(Boolean);
-	            var actionName = splitedPath[1]; // Action name in MVC
-	            var methodName = actionName[0].toLowerCase() + actionName.slice(1) + "Action";
-
-	            this.videosController[methodName]();
+	            var splittedPath = window.location.pathname.split('/').filter(Boolean);
+	            var actionName = splittedPath[1]; // Action name in MVC in PascalCase
+	            var methodName = actionName[0].toLowerCase() + actionName.slice(1); //cammelCase
+	            this.videosController.invokeAction(methodName);
 	        }
 	    }], [{
 	        key: 'run',
@@ -2032,9 +2031,27 @@
 	        _classCallCheck(this, VideosController);
 
 	        this.view = null;
+	        this.registerActions_();
 	    }
 
 	    _createClass(VideosController, [{
+	        key: 'registerActions_',
+	        value: function registerActions_() {
+	            this.actions = [{
+	                actionName: 'search',
+	                method: this.searchAction
+	            }, {
+	                actionName: 'recommendedVideos',
+	                method: this.recommendedVideosAction
+	            }, {
+	                actionName: 'allVideos',
+	                method: this.allVideosAction
+	            }, {
+	                actionName: 'viewVideo',
+	                method: this.viewVideoAction
+	            }];
+	        }
+	    }, {
 	        key: 'pushView_',
 	        value: function pushView_(viewClass, completer) {
 	            this.view = new viewClass(this);
@@ -2045,6 +2062,15 @@
 	        key: 'updateView_',
 	        value: function updateView_(completer, message) {
 	            this.view.partialRefreshAsync(completer, message);
+	        }
+	    }, {
+	        key: 'invokeAction',
+	        value: function invokeAction(actionName) {
+	            var action = this.actions.find(function (x) {
+	                return x.actionName == actionName;
+	            });
+	            if (action == undefined || action == null) throw new Error('No such action registered');
+	            action.method.call(this);
 	        }
 	    }, {
 	        key: 'searchAction',
