@@ -10,7 +10,22 @@ import VideoView from './views/VideoView.js';
 export default class VideosController {
     constructor(){
         this.view = null;
+        this.registerActions_();
     }
+
+    registerActions_() {
+
+        this.actions = [{
+            actionName: 'search',
+            method: this.searchAction
+        }]
+
+        // this[['search']] = this.searchAction;
+        // this[['recommendedVideos']] = this.recommendedVideosAction;
+        // this[['allVideos']] = this.allVideosAction;
+        // this[['viewVideo']] = this.viewVideoAction;
+    }
+
     pushView_(viewClass, completer){
         this.view = new viewClass(this);
         this.view.show();
@@ -19,6 +34,13 @@ export default class VideosController {
 
     updateView_(completer, message){
         this.view.partialRefreshAsync(completer, message);
+    }
+
+    invokeAction(actionName) {
+        var action  = this.actions.find(); //TODO: 
+        if(action == undefined || action == null)
+            throw new Error('No such action registered');
+        action();
     }
 
     searchAction(searchQuery){
