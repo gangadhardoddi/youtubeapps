@@ -14,16 +14,22 @@ export default class VideosController {
     }
 
     registerActions_() {
-
         this.actions = [{
             actionName: 'search',
             method: this.searchAction
-        }]
-
-        // this[['search']] = this.searchAction;
-        // this[['recommendedVideos']] = this.recommendedVideosAction;
-        // this[['allVideos']] = this.allVideosAction;
-        // this[['viewVideo']] = this.viewVideoAction;
+        },
+        {
+            actionName: 'recommendedVideos',
+            method: this.recommendedVideosAction
+        },
+        {
+            actionName: 'allVideos',
+            method: this.allVideosAction
+        },
+        {
+            actionName: 'viewVideo',
+            method: this.viewVideoAction
+        }];
     }
 
     pushView_(viewClass, completer){
@@ -37,10 +43,10 @@ export default class VideosController {
     }
 
     invokeAction(actionName) {
-        var action  = this.actions.find(); //TODO: 
+        var action  = this.actions.find(x => x.actionName == actionName);
         if(action == undefined || action == null)
             throw new Error('No such action registered');
-        action();
+        action.method.call(this);
     }
 
     searchAction(searchQuery){
